@@ -8,9 +8,10 @@ const XLSX = require('xlsx');
 // Added adosamientos_excel to the list!
 const directoriesToScan = [
   './classroom_excel',
-  './corridor_excel',
   './electrical_excel',
-  './roofs_excel',
+  './roof_excel',
+  './facade_excel',
+  './structure_excel',
   './adosamientos_excel'
 ];
 
