@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modular School Builder</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      background: #1a1a1a;
+      color: white;
+    }
+
+    #top-bar {
+      height: 60px;
+      background: #111;
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 20;
+    }
+
+    #main-layout {
+      display: flex;
+      flex-grow: 1;
+      height: calc(100vh - 60px);
+    }
+
+    #sidebar {
+      width: 340px;
+      background: #242424;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      border-right: 1px solid #333;
+      z-index: 10;
+      overflow-y: auto;
+    }
+
+    #app-container {
+      flex-grow: 1;
+      width: calc(100vw - 340px);
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #2a2a2a 0%, #0d0d0d 100%);
+    }
+
+    button {
+      background: #52795f;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #42634d;
+    }
+
+    .btn-secondary {
+      background: #3c5444;
+    }
+
+    .btn-secondary:hover {
+      background: #2f4235;
+    }
+
+    .quantity-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #333;
+      padding: 8px 0;
+    }
+
+    .prop-group {
+      background: #1e1e1e;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #444;
+    }
+
+    .prop-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.9em;
+    }
+
+    .prop-row input[type="number"] {
+      width: 60px;
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+      padding: 4px;
+      border-radius: 4px;
+      text-align: right;
+    }
+
+    .osnap-panel {
+      background: #1e1e1e;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.9em;
+      border-left: 4px solid #e74c3c;
+      margin-bottom: 10px;
+    }
+
+    .osnap-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+      color: #ccc;
+    }
+
+    .osnap-grid label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .boq-panel {
+      background: #1e1e1e;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 0.85em;
+      margin-bottom: 10px;
+    }
+
+    .boq-header {
+      margin-bottom: 8px;
+      color: #74a382;
+      font-weight: bold;
+      border-bottom: 1px solid #333;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    #boq-bom-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #boq-bom-list::-webkit-scrollbar-track {
+      background: #1e1e1e;
+    }
+
+    #boq-bom-list::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 3px;
+    }
+
+    #boq-bom-list::-webkit-scrollbar-thumb:hover {
+      background: #666;
+    }
+
+    #context-menu {
+      position: absolute;
+      display: none;
+      background: #242424;
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 5px;
+      flex-direction: column;
+      z-index: 100;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+      max-height: 400px;
+      overflow-y: auto;
+      min-width: 220px;
+    }
+
+    #context-menu hr {
+      border: 0;
+      border-top: 1px solid #444;
+      margin: 4px 0;
+    }
+
+    .menu-header {
+      background: #111;
+      color: #aaa;
+      font-size: 0.75em;
+      padding: 4px 8px;
+      margin: 4px 0 2px 0;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-radius: 3px;
+    }
+
+    #context-menu button {
+      background: transparent;
+      text-align: left;
+      padding: 6px 12px;
+      font-weight: normal;
+      border-radius: 4px;
+      font-size: 0.85em;
+      border: 1px solid transparent;
+    }
+
+    #context-menu button:hover {
+      background: #52795f;
+      border: 1px solid #74a382;
+    }
+
+    select optgroup {
+      background: #222;
+      color: #aaa;
+    }
+
+    select option {
+      background: #333;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="top-bar">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <h2 style="color: #74a382; margin-right: 10px;">Modular School Builder</h2>
+      <div style="display: flex; align-items: center; gap: 8px; border-left: 1px solid #444; padding-left: 15px;">
+        <label style="font-size: 0.85em; color: #aaa;">Grid Snap (m):</label>
+        <input type="number" id="global-snap-input" value="0.5" step="0.1"
+          style="width: 60px; background: #333; color: white; border: 1px solid #555; padding: 6px; border-radius: 4px; text-align: right; font-weight: bold;">
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px; border-left: 1px solid #444; padding-left: 15px;">
+        <label style="font-size: 0.85em; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+          <input type="checkbox" id="trackpad-toggle"> Trackpad Nav
+        </label>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button id="save-btn" class="btn-secondary">Save Project</button>
+      <button id="load-btn" class="btn-secondary">Load Project</button>
+      <input type="file" id="load-file-input" accept=".json" style="display: none;">
+      <button id="export-gltf-btn" class="btn-secondary">Export 3D</button>
+      <button id="export-ifc-btn" class="btn-secondary">Export BIM</button>
+
+      <div style="width: 1px; height: 30px; background: #444; margin: 0 5px;"></div>
+
+      <button id="qc-elec-btn" style="background: #3c5444;">QC: Electrical</button>
+      <button id="qc-roof-btn" style="background: #3c5444;">QC: Roofs</button>
+      <button id="qc-orient-btn" style="background: #3c5444;">QC: Orient&walls</button>
+      <button id="qc-links-btn" style="background: #3c5444;">QC: Links</button>
+
+      <div style="width: 1px; height: 30px; background: #444; margin: 0 5px;"></div>
+
+      <button id="zoom-extents-btn" class="btn-secondary">Zoom Extent</button>
+      <button id="view-mode-btn" style="background: #52795f;">2D Plan View</button>
+    </div>
+  </div>
+
+  <div id="main-layout">
+    <div id="sidebar">
+      <div>
+        <p style="margin-bottom: 5px;">1. Choose a module type:</p>
+        <select id="block-type-select"
+          style="padding: 10px; border-radius: 4px; background: #333; color: white; border: 1px solid #555; width: 100%;"></select>
+      </div>
+
+      <div>
+        <p style="margin-bottom: 5px;">2. Choose Mode:</p>
+        <div style="display: flex; gap: 10px;">
+          <button id="mode-select-btn" style="flex: 1; background: #629270;">Select</button>
+          <button id="mode-build-btn" style="flex: 1; background: #3c5444;">Build</button>
+        </div>
+      </div>
+
+      <div id="properties-panel" style="display: none;">
+        <hr style="border-color: #333; margin-bottom: 15px;">
+        <div
+          style="background: #2a2a2a; padding: 10px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #74a382;">
+          <h4 id="prop-name" style="margin-bottom: 5px; color: #74a382;">Module Name</h4>
+          <p id="prop-desc" style="font-size: 0.85em; color: #ccc; line-height: 1.4;">Module Description</p>
+
+          <div style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;">
+            <h4 style="margin-bottom: 5px; color: #f1c40f; font-size: 0.9em;">Electrical Kit</h4>
+            <select id="elec-select"
+              style="width: 100%; background: #333; color: white; border: 1px solid #555; padding: 4px; border-radius: 4px;">
+              <option value="">No Kit Assigned</option>
+            </select>
+            <p id="elec-desc" style="font-size: 0.8em; color: #aaa; margin-top: 5px; line-height: 1.3;">No electrical
+              kit assigned.</p>
+          </div>
+
+          <div style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;">
+            <h4 style="margin-bottom: 5px; color: #00cec9; font-size: 0.9em;">Roof Type</h4>
+            <select id="roof-select"
+              style="width: 100%; background: #333; color: white; border: 1px solid #555; padding: 4px; border-radius: 4px;">
+              <option value="">No Roof</option>
+            </select>
+            <p id="roof-desc" style="font-size: 0.8em; color: #aaa; margin-top: 5px; line-height: 1.3;">No roof
+              assigned.</p>
+          </div>
+        </div>
+
+        <button id="gizmo-mode-btn" style="width: 100%; margin-bottom: 15px; background: #466b53;">Gizmo:
+          TRANSLATE</button>
+
+        <div class="osnap-panel">
+          <div style="color: #e74c3c; font-weight: bold; margin-bottom: 5px;">Osnap Controls</div>
+          <div class="osnap-grid">
+            <label><input type="checkbox" id="osnap-end" checked> End <span style="color:#e74c3c">■</span></label>
+            <label><input type="checkbox" id="osnap-mid" checked> Mid <span style="color:#f1c40f">■</span></label>
+            <label><input type="checkbox" id="osnap-int" checked> Int <span style="color:#00ffff">■</span></label>
+            <label><input type="checkbox" id="osnap-perp" checked> Perp <span style="color:#e67e22">■</span></label>
+            <label><input type="checkbox" id="osnap-near" checked> Near <span style="color:#ffffff">■</span></label>
+            <label><input type="checkbox" id="osnap-cen"> Cen <span style="color:#9b59b6">■</span></label>
+          </div>
+        </div>
+
+        <div class="prop-group" style="margin-bottom: 10px;">
+          <h4 style="margin-bottom: 8px; color: #aaa;">Position (m)</h4>
+          <div class="prop-row"><label>X Axis</label><input type="number" id="pos-x" step="0.001"></div>
+          <div class="prop-row"><label>Y Axis</label><input type="number" id="pos-y" step="0.001"></div>
+          <div class="prop-row"><label>Z Axis</label><input type="number" id="pos-z" step="0.001"></div>
+        </div>
+        <div class="prop-group">
+          <h4 style="margin-bottom: 8px; color: #aaa;">Rotation (deg)</h4>
+          <div class="prop-row"><label>X Axis</label><input type="number" id="rot-x" step="1"></div>
+          <div class="prop-row"><label>Y Axis</label><input type="number" id="rot-y" step="1"></div>
+          <div class="prop-row"><label>Z Axis</label><input type="number" id="rot-z" step="1"></div>
+        </div>
+      </div>
+
+      <hr style="border-color: #333; margin-top: 5px;">
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h3 style="margin: 0; color: #74a382;">Bill of Quantities</h3>
+        <button id="export-csv-btn" class="btn-secondary" style="padding: 6px 10px; font-size: 0.8em;">Export
+          CSV</button>
+      </div>
+
+      <div class="boq-panel">
+        <div class="boq-header">Module Count</div>
+        <div id="qto-list" style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; justify-content: space-between; color: #ccc;"><span>Classrooms:</span>
+            <span>0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; color: #ccc;"><span>Corridors:</span>
+            <span>0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="boq-panel">
+        <div class="boq-header">Itemized Elements (BOM)</div>
+        <div id="boq-bom-list"
+          style="display: flex; flex-direction: column; gap: 4px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
+        </div>
+      </div>
+
+
+
+      <div class="boq-panel">
+        <div class="boq-header">Roofs</div>
+        <div id="boq-roof-list" style="display: flex; flex-direction: column; gap: 4px;"></div>
+      </div>
+
+      <div class="boq-panel" style="margin-bottom: 15px;">
+        <div class="boq-header">Adosamientos (Joint Links)</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; justify-content: space-between; color: #ccc;"><span>Largo Standard (0
+              Walls):</span> <span id="link-standard">0</span></div>
+          <div style="display: flex; justify-content: space-between; color: #ccc;"><span>Largo Panel (1 Wall):</span>
+            <span id="link-panel">0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; color: #ccc;"><span>Simples (2 Walls):</span> <span
+              id="link-simples">0</span></div>
+          <div style="display: flex; justify-content: space-between; color: #3498db; font-weight: bold;">
+            <span>Conexiones Verticales:</span> <span id="link-verticales">0</span>
+          </div>
+        </div>
+      </div>
+
+      <button id="toggle-fee-btn" style="width: 100%; background: #4a7c59; margin-bottom: 10px;">Show Project
+        Fee</button>
+      <div id="fee-panel"
+        style="display: none; background: #1a1a1a; padding: 12px; border-radius: 6px; border: 1px solid #444; font-size: 0.85em;">
+        <div
+          style="margin-bottom: 8px; color: #74a382; font-weight: bold; border-bottom: 1px solid #444; padding-bottom: 4px; text-transform: uppercase;">
+          Project Fee Breakdown</div>
+        <div id="fee-list" style="display: flex; flex-direction: column; gap: 4px; color: #ccc;"></div>
+        <hr style="border-color: #333; margin: 10px 0;">
+        <div class="quantity-row" style="font-weight: bold; font-size: 1.1em; color: #fff; padding: 0;">
+          <span>Total Fee:</span> <span id="total-cost">€0</span>
+        </div>
+      </div>
+
+    </div>
+    <div id="app-container"></div>
+  </div>
+
+  <div id="context-menu"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

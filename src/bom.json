@@ -1,0 +1,1724 @@
+{
+  "ESTRUCTURA": {
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    }
+  },
+  "A1": {
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 3
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 3
+    }
+  },
+  "A2PI": {
+    "CARP-008": {
+      "name": "PUERTA IZQUIERDA",
+      "qty": 1
+    },
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 3
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 4
+    }
+  },
+  "A3": {
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 2
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 3
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 3
+    }
+  },
+  "A4": {
+    "CARP-012": {
+      "name": "VENTANAS MOSQUITERA (CON REJAS)",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 3
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 3
+    }
+  },
+  "B1": {
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 2
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 2
+    }
+  },
+  "B2PI": {
+    "CARP-008": {
+      "name": "PUERTA IZQUIERDA",
+      "qty": 1
+    },
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 2
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 3
+    }
+  },
+  "B2PD": {
+    "CARP-007": {
+      "name": "PUERTA DERECHA",
+      "qty": 1
+    },
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 2
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 3
+    }
+  },
+  "B3": {
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 2
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 2
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 2
+    }
+  },
+  "B4": {
+    "CARP-012": {
+      "name": "VENTANAS MOSQUITERA (CON REJAS)",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 2
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 2
+    }
+  },
+  "C1": {
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 3
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 3
+    }
+  },
+  "C2PD": {
+    "CARP-007": {
+      "name": "PUERTA DERECHA",
+      "qty": 1
+    },
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 3
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 4
+    }
+  },
+  "C3": {
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 2
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 3
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 3
+    }
+  },
+  "C4": {
+    "CARP-012": {
+      "name": "VENTANAS MOSQUITERA (CON REJAS)",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 3
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 3
+    }
+  },
+  "D2PD": {
+    "CARP-007": {
+      "name": "PUERTA DERECHA",
+      "qty": 1
+    },
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "ELEC-015": {
+      "name": "SENSOR DE ILUMINACIÓN",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 4
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 4
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 4
+    }
+  },
+  "D2PI": {
+    "CARP-008": {
+      "name": "PUERTA IZQUIERDA",
+      "qty": 1
+    },
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "ELEC-015": {
+      "name": "SENSOR DE ILUMINACIÓN",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 4
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 4
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 4
+    }
+  },
+  "E4": {
+    "CARP-012": {
+      "name": "VENTANAS MOSQUITERA (CON REJAS)",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 1
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 1
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 1
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 1
+    }
+  },
+  "E5PCE": {
+    "CARP-009": {
+      "name": "PUERTAS DOBLES + KIT ANTIPANICO",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 1
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 1
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 1
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 1
+    }
+  },
+  "E5PCI": {
+    "CARP-009": {
+      "name": "PUERTAS DOBLES + KIT ANTIPANICO",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 1
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 1
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 1
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 1
+    }
+  },
+  "F1": {
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 1
+    }
+  },
+  "F2": {
+    "CARP-011": {
+      "name": "VENTANAS CON REJAS",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 1
+    },
+    "REV-007": {
+      "name": "RODAPIE",
+      "qty": 1
+    }
+  },
+  "F3": {
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    }
+  },
+  "G4": {
+    "CARP-012": {
+      "name": "VENTANAS MOSQUITERA (CON REJAS)",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 1
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 1
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 1
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 1
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 2
+    }
+  },
+  "H4": {
+    "CARP-012": {
+      "name": "VENTANAS MOSQUITERA (CON REJAS)",
+      "qty": 1
+    },
+    "ELEC-007": {
+      "name": "LUMINARIAS 60x60",
+      "qty": 2
+    },
+    "ELEC-008": {
+      "name": "LUMINARIAS 60x60 CON REGULADOR",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 1
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 2
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 1
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 1
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 2
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 1
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 2
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 2
+    }
+  },
+  "ASPD": {
+    "CARP-006": {
+      "name": "PUERTA IZQUIERDA (ASEO)",
+      "qty": 4
+    },
+    "CARP-007": {
+      "name": "PUERTA DERECHA",
+      "qty": 1
+    },
+    "CARP-010": {
+      "name": "VENTANAS ABATIBLES 50cm x 50cm",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "ELEC-010": {
+      "name": "LUMINARIAS TUBO LED",
+      "qty": 2
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 4
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 4
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 9
+    }
+  },
+  "ASPI": {
+    "CARP-006": {
+      "name": "PUERTA IZQUIERDA (ASEO)",
+      "qty": 4
+    },
+    "CARP-008": {
+      "name": "PUERTA IZQUIERDA",
+      "qty": 1
+    },
+    "CARP-010": {
+      "name": "VENTANAS ABATIBLES 50cm x 50cm",
+      "qty": 1
+    },
+    "ELEC-010": {
+      "name": "LUMINARIAS TUBO LED",
+      "qty": 2
+    },
+    "ELEC-012": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 4
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 4
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 9
+    }
+  },
+  "ADPD": {
+    "CARP-006": {
+      "name": "PUERTA IZQUIERDA (ASEO)",
+      "qty": 2
+    },
+    "CARP-007": {
+      "name": "PUERTA DERECHA",
+      "qty": 2
+    },
+    "CARP-010": {
+      "name": "VENTANAS ABATIBLES 50cm x 50cm",
+      "qty": 1
+    },
+    "ELEC-010": {
+      "name": "LUMINARIAS TUBO LED",
+      "qty": 2
+    },
+    "ELEC-013": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 4
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 4
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 8
+    }
+  },
+  "ADPI": {
+    "CARP-006": {
+      "name": "PUERTA IZQUIERDA (ASEO)",
+      "qty": 2
+    },
+    "CARP-008": {
+      "name": "PUERTA IZQUIERDA",
+      "qty": 2
+    },
+    "CARP-010": {
+      "name": "VENTANAS ABATIBLES 50cm x 50cm",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "ELEC-010": {
+      "name": "LUMINARIAS TUBO LED",
+      "qty": 2
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 4
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 4
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 8
+    }
+  },
+  "AI": {
+    "CARP-007": {
+      "name": "PUERTA DERECHA",
+      "qty": 1
+    },
+    "CARP-008": {
+      "name": "PUERTA IZQUIERDA",
+      "qty": 1
+    },
+    "CARP-013": {
+      "name": "VENTANAS SIN REJAS",
+      "qty": 2
+    },
+    "ELEC-006": {
+      "name": "EXTRACTOR FORZADO BAÑOS",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 2
+    },
+    "ELEC-010": {
+      "name": "LUMINARIAS TUBO LED",
+      "qty": 2
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "FONT-029": {
+      "name": "TERMO ELECTRICO 30L",
+      "qty": 1
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 4
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 4
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 4
+    }
+  },
+  "AIMPD": {
+    "CARP-007": {
+      "name": "PUERTA DERECHA",
+      "qty": 1
+    },
+    "ELEC-006": {
+      "name": "EXTRACTOR FORZADO BAÑOS",
+      "qty": 1
+    },
+    "ELEC-010": {
+      "name": "LUMINARIAS TUBO LED",
+      "qty": 2
+    },
+    "ELEC-017": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "FONT-029": {
+      "name": "TERMO ELECTRICO 30L",
+      "qty": 1
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 4
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 4
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 4
+    }
+  },
+  "AIMPI": {
+    "CARP-008": {
+      "name": "PUERTA IZQUIERDA",
+      "qty": 1
+    },
+    "ELEC-006": {
+      "name": "EXTRACTOR FORZADO BAÑOS",
+      "qty": 1
+    },
+    "ELEC-009": {
+      "name": "LUMINARIAS EMERGENCIA",
+      "qty": 1
+    },
+    "ELEC-010": {
+      "name": "LUMINARIAS TUBO LED",
+      "qty": 2
+    },
+    "FONT-004": {
+      "name": "BAJANTE PILAR",
+      "qty": 4
+    },
+    "FONT-029": {
+      "name": "TERMO ELECTRICO 30L",
+      "qty": 1
+    },
+    "PER-001C": {
+      "name": "ANGULO INVERSO CARA CORTA",
+      "qty": 2
+    },
+    "PER-001L": {
+      "name": "ANGULO INVERSO CARA LARGA",
+      "qty": 4
+    },
+    "PER-009": {
+      "name": "ESQUINEROS SIMPLES",
+      "qty": 4
+    },
+    "PER-026": {
+      "name": "PILAR 2.95m 3mm",
+      "qty": 4
+    },
+    "PER-035C": {
+      "name": "U CORTA 1880mm",
+      "qty": 2
+    },
+    "PER-035L": {
+      "name": "U CARA LARGA 2855mm",
+      "qty": 4
+    },
+    "PER-040C": {
+      "name": "Z CARA CORTA 1840mm",
+      "qty": 2
+    },
+    "PER-040L": {
+      "name": "Z CARA LARGA 2840mm",
+      "qty": 4
+    },
+    "REV-003": {
+      "name": "PANELES 2940mm",
+      "qty": 4
+    }
+  },
+  "S0": {
+    "ELEC-022": {
+      "name": "CAJA DE 4 ENCHUFES",
+      "qty": 1
+    }
+  },
+  "S1": {
+    "ELEC-021": {
+      "name": "CAJA DE 4 ENCHUFES Y 2 DATOS PARA LOS DESPACHOS",
+      "qty": 1
+    }
+  },
+  "S2": {
+    "ELEC-021": {
+      "name": "CAJA DE 4 ENCHUFES Y 2 DATOS PARA LOS DESPACHOS",
+      "qty": 2
+    }
+  },
+  "S3": {
+    "ELEC-021": {
+      "name": "CAJA DE 4 ENCHUFES Y 2 DATOS PARA LOS DESPACHOS",
+      "qty": 3
+    }
+  },
+  "S4": {
+    "ELEC-021": {
+      "name": "CAJA DE 4 ENCHUFES Y 2 DATOS PARA LOS DESPACHOS",
+      "qty": 4
+    }
+  },
+  "SP": {
+    "ELEC-019": {
+      "name": "TOMA CORRIENTE + DATOS PARA PROYECTOR",
+      "qty": 1
+    }
+  },
+  "SC": {
+    "ELEC-004": {
+      "name": "CUADRO ELÉCTRICO",
+      "qty": 1
+    },
+    "ELEC-017": {
+      "name": "INTERUPTOR",
+      "qty": 1
+    }
+  },
+  "SA": {
+    "ELEC-001": {
+      "name": "AIRE ACONDICIONADO (UNIDAD EXTERIOR E INTERIOR)",
+      "qty": 1
+    },
+    "ELEC-023": {
+      "name": "CAJA ENCHUFES DOBLE",
+      "qty": 1
+    }
+  },
+  "SK": {
+    "ELEC-022": {
+      "name": "CAJA DE 4 ENCHUFES",
+      "qty": 1
+    },
+    "ELEC-025": {
+      "name": "ENCHUFE LAVAVAJILLAS",
+      "qty": 1
+    },
+    "ELEC-026": {
+      "name": "ENCHUFE TERMO",
+      "qty": 1
+    },
+    "ELEC-027": {
+      "name": "ENCHUFE FRIGORIFICO",
+      "qty": 1
+    },
+    "FONT-031": {
+      "name": "TERMO ELECTRICO 100L",
+      "qty": 1
+    }
+  },
+  "ST": {
+    "ELEC-018": {
+      "name": "TOMA CORRIENTE A/A",
+      "qty": 1
+    }
+  },
+  "LARGO": {
+    "PER-007": {
+      "name": "ESQUINEROS CONTRAPANEL",
+      "qty": 2
+    },
+    "PER-030L": {
+      "name": "REMATE TECHO CONTRAPANEL (TECHO PANEL) CARA LARGA",
+      "qty": 2
+    }
+  },
+  "LARGO_STANDARD": {
+    "MISC-005": {
+      "name": "GOMA NEGRA",
+      "qty": 3
+    },
+    "PER-008": {
+      "name": "ESQUINEROS DOBLES",
+      "qty": 2
+    },
+    "PER-029L": {
+      "name": "REMATE TECHO AULA \"RTAM\" CARA LARGA",
+      "qty": 2
+    },
+    "TOR-007": {
+      "name": "M16 TORNILLOS UNION",
+      "qty": 4
+    }
+  }
+}

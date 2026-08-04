@@ -1,0 +1,39 @@
+Category,Item ID,Item Name,Quantity
+Modules,,Classrooms,4
+Modules,,Corridors,2
+BOM - Toilet & Plumbing,FONT-004,"BAJANTE PILAR",32
+BOM - Metal Profiles,PER-026,"PILAR 2.95m 3mm",32
+BOM - Doors & Windows,CARP-011,"VENTANAS CON REJAS",3
+BOM - Electrical Equipment,ELEC-007,"LUMINARIAS 60x60",6
+BOM - Electrical Equipment,ELEC-008,"LUMINARIAS 60x60 CON REGULADOR",3
+BOM - Metal Profiles,PER-001C,"ANGULO INVERSO CARA CORTA",8
+BOM - Metal Profiles,PER-001L,"ANGULO INVERSO CARA LARGA",8
+BOM - Metal Profiles,PER-009,"ESQUINEROS SIMPLES",8
+BOM - Metal Profiles,PER-035C,"U CORTA 1880mm",8
+BOM - Metal Profiles,PER-035L,"U CARA LARGA 2855mm",8
+BOM - Metal Profiles,PER-040C,"Z CARA CORTA 1840mm",8
+BOM - Metal Profiles,PER-040L,"Z CARA LARGA 2840mm",8
+BOM - Walls & Finishes,REV-003,"PANELES 2940mm",12
+BOM - Walls & Finishes,REV-007,"RODAPIE",8
+BOM - Electrical Equipment,ELEC-021,"CAJA DE 4 ENCHUFES Y 2 DATOS PARA LOS DESPACHOS",4
+BOM - Doors & Windows,CARP-007,"PUERTA DERECHA",1
+BOM - Doors & Windows,CARP-008,"PUERTA IZQUIERDA",1
+BOM - Doors & Windows,CARP-013,"VENTANAS SIN REJAS",2
+BOM - Electrical Equipment,ELEC-006,"EXTRACTOR FORZADO BAÑOS",1
+BOM - Electrical Equipment,ELEC-009,"LUMINARIAS EMERGENCIA",2
+BOM - Electrical Equipment,ELEC-010,"LUMINARIAS TUBO LED",2
+BOM - Toilet & Plumbing,FONT-029,"TERMO ELECTRICO 30L",1
+BOM - Miscellaneous,MISC-005,"GOMA NEGRA",3
+BOM - Metal Profiles,PER-008,"ESQUINEROS DOBLES",2
+BOM - Metal Profiles,PER-029L,"REMATE TECHO AULA ""RTAM"" CARA LARGA",2
+BOM - Miscellaneous,TOR-007,"M16 TORNILLOS UNION",4
+BOM - Metal Profiles,PER-007,"ESQUINEROS CONTRAPANEL",2
+BOM - Metal Profiles,PER-030L,"REMATE TECHO CONTRAPANEL (TECHO PANEL) CARA LARGA",2
+Electrical Kits,S1,S1 - 1 x 4 ENCHUFES + 2 DATA,4
+Roofs,R_CLASS,Classroom Roof,4
+Roofs,R_CORR,Corridor Roof,2
+Adosamientos,,Largo Standard,1
+Adosamientos,,Largo Panel,1
+Adosamientos,,Simples,1
+Adosamientos,,Conexiones Verticales,0
+Project Fee,,Total Fee (EUR),53
