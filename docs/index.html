@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modulnor School Configurator — Documentation</title>
+  <meta name="description" content="Full documentation for the Modulnor School Configurator — interactions, shortcuts, workflow, BOM calculations and assumptions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:          #0d1117;
+      --bg-2:        #161b22;
+      --bg-3:        #1c2128;
+      --border:      #30363d;
+      --text:        #e6edf3;
+      --text-muted:  #8b949e;
+      --text-dim:    #484f58;
+      --green:       #3fb950;
+      --green-dim:   #1a3b22;
+      --blue:        #58a6ff;
+      --orange:      #e67e22;
+      --red:         #e74c3c;
+      --yellow:      #f1c40f;
+      --purple:      #9b59b6;
+      --teal:        #1abc9c;
+      --sidebar-w:   280px;
+      --header-h:    60px;
+      --font:        'Inter', system-ui, sans-serif;
+      --mono:        'JetBrains Mono', 'Fira Code', monospace;
+      --radius:      8px;
+      --shadow:      0 4px 24px rgba(0,0,0,.4);
+    }
+
+    html { scroll-behavior: smooth; font-size: 15px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.7;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: rgba(13,17,23,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 1.5rem;
+      gap: 1rem;
+      z-index: 100;
+    }
+    .header-logo {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--green), #2ecc71);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 700; color: #0d1117;
+      flex-shrink: 0;
+    }
+    .header-title {
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .header-badge {
+      font-size: .7rem;
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid #2d5a37;
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+    .header-spacer { flex: 1; }
+    .header-link {
+      font-size: .82rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: .3rem .7rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      transition: all .15s;
+    }
+    .header-link:hover { color: var(--text); border-color: #484f58; background: var(--bg-2); }
+
+    /* ── Layout ── */
+    .layout {
+      display: flex;
+      padding-top: var(--header-h);
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    nav {
+      position: fixed;
+      top: var(--header-h);
+      left: 0;
+      width: var(--sidebar-w);
+      height: calc(100vh - var(--header-h));
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      background: var(--bg-2);
+      padding: 1.5rem 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    nav::-webkit-scrollbar { width: 4px; }
+    nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .nav-section {
+      padding: .25rem 1rem .25rem 1.25rem;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 1rem;
+    }
+    nav a {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .35rem 1rem .35rem 1.5rem;
+      font-size: .82rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all .15s;
+      line-height: 1.4;
+    }
+    nav a:hover { color: var(--text); background: rgba(255,255,255,.04); }
+    nav a.active { color: var(--green); border-left-color: var(--green); background: var(--green-dim); }
+    nav a .nav-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: .5;
+      flex-shrink: 0;
+    }
+
+    /* ── Main Content ── */
+    main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 3rem 4rem 6rem;
+      max-width: calc(var(--sidebar-w) + 860px);
+    }
+
+    /* ── Typography ── */
+    h1 { font-size: 2rem; font-weight: 700; color: var(--text); margin-bottom: .75rem; letter-spacing: -.02em; }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 3rem 0 1rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: 80px;
+    }
+    h3 { font-size: 1rem; font-weight: 600; color: var(--text); margin: 1.75rem 0 .75rem; scroll-margin-top: 80px; }
+    h4 { font-size: .9rem; font-weight: 600; color: var(--text-muted); margin: 1.25rem 0 .5rem; }
+    p { color: var(--text-muted); margin-bottom: .85rem; }
+    strong { color: var(--text); font-weight: 600; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #0d2818 0%, #0d1117 60%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(63,185,80,.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--green);
+      background: var(--green-dim);
+      border: 1px solid #2d5a37;
+      padding: .2rem .6rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .hero p { font-size: 1.05rem; line-height: 1.65; color: #c9d1d9; }
+    .hero-outputs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: 1.25rem;
+    }
+    .output-chip {
+      font-size: .78rem;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      padding: .3rem .75rem;
+      border-radius: 999px;
+      color: var(--text-muted);
+    }
+    .output-chip span { color: var(--green); margin-right: .3rem; }
+
+    /* ── Tables ── */
+    .table-wrap { overflow-x: auto; margin: 1rem 0 1.5rem; border-radius: var(--radius); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    th {
+      background: var(--bg-3);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      padding: .65rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: .6rem 1rem; border-bottom: 1px solid #21262d; color: var(--text-muted); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,.02); }
+    td strong, td code { color: var(--text); }
+    td:first-child { color: var(--text); font-weight: 500; }
+
+    /* ── Code ── */
+    code {
+      font-family: var(--mono);
+      font-size: .82em;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      padding: .1em .4em;
+      border-radius: 4px;
+      color: #a5d6ff;
+    }
+    pre {
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      font-family: var(--mono);
+      font-size: .82rem;
+      line-height: 1.65;
+      color: #a5d6ff;
+    }
+    pre .comment { color: var(--text-dim); }
+    pre .string  { color: #a5d6ff; }
+
+    /* ── Keyboard Shortcut Badges ── */
+    kbd {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .75rem;
+      background: var(--bg-3);
+      border: 1px solid #484f58;
+      border-bottom-width: 2px;
+      padding: .1em .45em;
+      border-radius: 4px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    /* ── Snap Colour Dots ── */
+    .snap-dot {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: .75rem;
+      margin: 1rem 0 1.5rem;
+    }
+    .card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      transition: border-color .15s;
+    }
+    .card:hover { border-color: #484f58; }
+    .card-label { font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--text-dim); margin-bottom: .4rem; }
+    .card-title { font-size: .9rem; font-weight: 600; color: var(--text); margin-bottom: .25rem; }
+    .card-desc  { font-size: .8rem; color: var(--text-muted); }
+
+    /* ── Callout boxes ── */
+    .callout {
+      display: flex;
+      gap: .75rem;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius);
+      margin: 1.25rem 0;
+      border-left: 3px solid;
+      font-size: .88rem;
+    }
+    .callout.note    { background: #141e2f; border-color: var(--blue);   color: #9ecbff; }
+    .callout.warning { background: #2b1d0e; border-color: var(--orange); color: #ffa94d; }
+    .callout.tip     { background: var(--green-dim); border-color: var(--green); color: #7ee787; }
+    .callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: .1rem; }
+
+    /* ── Workflow steps ── */
+    .steps { margin: 1rem 0 1.5rem; }
+    .step {
+      display: flex;
+      gap: 1rem;
+      padding: .75rem 0;
+      border-bottom: 1px solid #21262d;
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      width: 28px; height: 28px;
+      background: var(--green-dim);
+      border: 1px solid #2d5a37;
+      color: var(--green);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .78rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: .1rem;
+    }
+    .step-body { flex: 1; }
+    .step-title { font-weight: 600; color: var(--text); font-size: .9rem; margin-bottom: .2rem; }
+    .step-desc { color: var(--text-muted); font-size: .84rem; }
+
+    /* ── QC Mode Cards ── */
+    .qc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: 1rem 0; }
+    .qc-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+    }
+    .qc-card .qc-name { font-weight: 700; font-size: .95rem; margin-bottom: .35rem; }
+    .qc-card p { font-size: .83rem; margin: 0; }
+
+    /* ── Colour palette ── */
+    .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: middle; margin-right: 5px; }
+
+    /* ── Section divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+    /* ── Footer ── */
+    footer {
+      margin-left: var(--sidebar-w);
+      padding: 2rem 4rem;
+      border-top: 1px solid var(--border);
+      font-size: .8rem;
+      color: var(--text-dim);
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 900px) {
+      nav { display: none; }
+      main, footer { margin-left: 0; padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+<header>
+  <div class="header-logo">M</div>
+  <span class="header-title">Modulnor School Configurator</span>
+  <span class="header-badge">Docs</span>
+  <div class="header-spacer"></div>
+  <a class="header-link" href="https://github.com/ENZYME-APD/modulnor-school-configurator">GitHub ↗</a>
+</header>
+
+<!-- ═══════════════════════════ SIDEBAR ══════════════════════════ -->
+<div class="layout">
+<nav id="sidebar">
+  <div class="nav-section">Overview</div>
+  <a href="#what-it-does"><span class="nav-dot"></span>What it Does</a>
+  <a href="#workflow"><span class="nav-dot"></span>Design Workflow</a>
+
+  <div class="nav-section">Module Catalogue</div>
+  <a href="#classrooms"><span class="nav-dot"></span>Classroom Modules</a>
+  <a href="#corridors"><span class="nav-dot"></span>Corridor Modules</a>
+  <a href="#electrical-kits"><span class="nav-dot"></span>Electrical Kits</a>
+  <a href="#roof-kits"><span class="nav-dot"></span>Roof Kits</a>
+
+  <div class="nav-section">Interactions</div>
+  <a href="#modes"><span class="nav-dot"></span>Select vs Build Mode</a>
+  <a href="#mouse"><span class="nav-dot"></span>Mouse Controls</a>
+  <a href="#keyboard"><span class="nav-dot"></span>Keyboard Shortcuts</a>
+  <a href="#gizmo"><span class="nav-dot"></span>Transform Gizmo</a>
+  <a href="#osnap"><span class="nav-dot"></span>OSNAP Tool</a>
+  <a href="#context-menu"><span class="nav-dot"></span>Context Menu</a>
+  <a href="#properties"><span class="nav-dot"></span>Properties Panel</a>
+  <a href="#views"><span class="nav-dot"></span>View Modes</a>
+  <a href="#files"><span class="nav-dot"></span>File Operations</a>
+
+  <div class="nav-section">Quality Control</div>
+  <a href="#qc"><span class="nav-dot"></span>QC Modes</a>
+
+  <div class="nav-section">Calculations</div>
+  <a href="#calc-dimensions"><span class="nav-dot"></span>Module Dimensions</a>
+  <a href="#calc-links"><span class="nav-dot"></span>Link Detection</a>
+  <a href="#calc-walls"><span class="nav-dot"></span>Dynamic Corridor Walls</a>
+  <a href="#calc-bom"><span class="nav-dot"></span>BOM Assembly</a>
+  <a href="#calc-fee"><span class="nav-dot"></span>Project Fee</a>
+  <a href="#calc-undo"><span class="nav-dot"></span>Undo History</a>
+  <a href="#calc-csv"><span class="nav-dot"></span>CSV Export Format</a>
+
+  <div class="nav-section">Codebase</div>
+  <a href="#code-structure"><span class="nav-dot"></span>Source Structure</a>
+</nav>
+
+<!-- ═══════════════════════════ MAIN ═════════════════════════════ -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">🏫 ENZYME APD</div>
+    <h1>Modulnor School Configurator</h1>
+    <p>A browser-based 3D BIM configurator for designing modular school buildings from prefabricated volumetric units. Drag, snap, stack, and configure classroom and corridor modules — the app produces a live Bill of Quantities from every layout change.</p>
+    <div class="hero-outputs">
+      <span class="output-chip"><span>📦</span>Live BOM by trade</span>
+      <span class="output-chip"><span>🔗</span>Adosamiento counts</span>
+      <span class="output-chip"><span>📐</span>Corridor wall take-off</span>
+      <span class="output-chip"><span>💶</span>Fee estimate</span>
+      <span class="output-chip"><span>📄</span>CSV export</span>
+      <span class="output-chip"><span>🗂️</span>GLTF 3D export</span>
+      <span class="output-chip"><span>💾</span>Save / Load JSON</span>
+    </div>
+  </div>
+
+  <!-- ── WHAT IT DOES ── -->
+  <h2 id="what-it-does">What it Does</h2>
+  <p>The configurator runs entirely in the browser — no server, no login, no data sent anywhere. A session produces all the information needed for an early-stage procurement estimate and a 3D visualisation of the school layout.</p>
+  <p>The app operates on a set of <strong>prefabricated module types</strong> (classrooms, restrooms, corridors). Each module has a fixed footprint and a defined wall configuration. The BOM is derived from Excel-sourced material lists (<code>bom.json</code>) that are looked up per module type and per electrical / roof kit assignment.</p>
+
+  <!-- ── WORKFLOW ── -->
+  <h2 id="workflow">Typical Design Workflow</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Select a module type</div><div class="step-desc">Choose from the type dropdown in the toolbar — e.g. <code>B1</code> for a middle classroom, <code>A1</code> for a left-end classroom.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Switch to Build mode</div><div class="step-desc">Click the Build button. Your cursor is now in placement mode.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Click to place modules</div><div class="step-desc">Click on the floor to place the first module. Click on the face of an existing module to snap the next one directly against it.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Swap types via context menu</div><div class="step-desc">Right-click a module → <em>Swap to…</em> to change its type without moving it. Use this to refine end-cap modules (A/C types) as the row takes shape.</div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Align with OSNAP</div><div class="step-desc">Press <kbd>Ctrl</kbd>+<kbd>D</kbd> to activate OSNAP. Snap-drag modules by their vertices to align independently-placed groups precisely.</div></div></div>
+    <div class="step"><div class="step-num">6</div><div class="step-body"><div class="step-title">Assign electrical kits</div><div class="step-desc">Select a module → Properties Panel → choose an electrical kit from the dropdown. Hold Shift to multi-select and assign in bulk.</div></div></div>
+    <div class="step"><div class="step-num">7</div><div class="step-body"><div class="step-title">Assign roof kits</div><div class="step-desc">Same process — select modules and assign a roof type per module.</div></div></div>
+    <div class="step"><div class="step-num">8</div><div class="step-body"><div class="step-title">Run QC checks</div><div class="step-desc">Use the QC toolbar to visually verify: <strong>Elec</strong> (all kits assigned), <strong>Roof</strong> (all roofs assigned), <strong>Orient</strong> (corridor walls correct), <strong>Links</strong> (structural connections visible).</div></div></div>
+    <div class="step"><div class="step-num">9</div><div class="step-body"><div class="step-title">Review the BOQ panel</div><div class="step-desc">The panel on the right shows live material quantities grouped by trade. Check the adosamiento counts and corridor wall take-off.</div></div></div>
+    <div class="step"><div class="step-num">10</div><div class="step-body"><div class="step-title">Export</div><div class="step-desc">Export CSV for procurement, Save JSON for the next session, Export GLTF for coordination.</div></div></div>
+  </div>
+
+  <!-- ── CLASSROOM MODULES ── -->
+  <h2 id="classrooms">Classroom Modules</h2>
+  <p>All classroom modules share the same footprint: <strong>6 m long × 2.44 m wide × 3 m tall</strong>. The letter prefix describes the <em>wall configuration at the longitudinal ends</em>. "Left" = the back face (−Z in local space), "Right" = the front face (+Z in local space).</p>
+
+  <div class="callout note"><div class="callout-icon">ℹ️</div><div>The suffix <strong>PI</strong> = door hinged left (<em>puerta izquierda</em>), <strong>PD</strong> = door hinged right (<em>puerta derecha</em>), <strong>Ext</strong> = exterior face, <strong>Int</strong> = interior face.</div></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Code(s)</th><th>Family</th><th>Left Wall</th><th>Right Wall</th><th>Description</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td>A1, A2PI, A3, A4</td><td>Type A — Left End</td><td>✅</td><td>❌</td><td>One closing end wall on the left/back side</td><td>€10</td></tr>
+        <tr><td>B1, B2PI, B2PD, B3, B4</td><td>Type B — Middle</td><td>❌</td><td>❌</td><td>No closing end walls — for middle-of-row placement</td><td>€10</td></tr>
+        <tr><td>C1, C2PD, C3, C4</td><td>Type C — Right End</td><td>❌</td><td>✅</td><td>One closing end wall on the right/front side</td><td>€10</td></tr>
+        <tr><td>D2PD, D2PI</td><td>Type D — Standalone</td><td>✅</td><td>✅</td><td>Both end walls — for isolated standalone classrooms</td><td>€10</td></tr>
+        <tr><td>E4, E5PCE, E5PCI</td><td>Type E — 1 Wall</td><td>❌</td><td>❌</td><td>One wall panel (non-structural end variant)</td><td>€10</td></tr>
+        <tr><td>F1, F2, F3</td><td>Type F — 0 Walls</td><td>❌</td><td>❌</td><td>Open framing / no end walls</td><td>€10</td></tr>
+        <tr><td>G4</td><td>Type G</td><td>✅</td><td>❌</td><td>Left wall + back window variant</td><td>€10</td></tr>
+        <tr><td>H4</td><td>Type H</td><td>❌</td><td>✅</td><td>Right wall + back window variant</td><td>€10</td></tr>
+        <tr><td>ASPD, ASPI, ADPD, ADPI, AI, AIMPD, AIMPI</td><td>Restrooms</td><td>✅</td><td>✅</td><td>Wet services modules — both end walls closed</td><td>€15</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── CORRIDOR MODULES ── -->
+  <h2 id="corridors">Corridor / Exterior Modules</h2>
+  <p>Corridor modules are placed <strong>rotated 90°</strong> automatically relative to classrooms and have dynamic wall detection (see <a href="#calc-walls">Calculations</a>).</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Code</th><th>Description</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td>CorridorFloor</td><td>Floor slab element only — 1 storey</td><td>€4</td></tr>
+        <tr><td>CorridorStructure</td><td>Structural frame + detachable wall panels. Exposed faces are automatically measured for the wall take-off.</td><td>€6</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── ELECTRICAL KITS ── -->
+  <h2 id="electrical-kits">Electrical Kits</h2>
+  <p>Each module can have one electrical kit assigned. The kit code maps to a set of material items in <code>bom.json</code> which are added to the BOM when the kit is assigned.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Code</th><th>Name</th><th>Contents</th></tr></thead>
+      <tbody>
+        <tr><td>S0</td><td>4 Enchufes</td><td>4 power sockets</td></tr>
+        <tr><td>S1</td><td>1×4 Enchufes + 2 Data</td><td>4 sockets + 2 data points</td></tr>
+        <tr><td>S2</td><td>2×4 Enchufes + 2 Data</td><td>8 sockets + 2 data points</td></tr>
+        <tr><td>S3</td><td>3×4 Enchufes + 2 Data</td><td>12 sockets + 2 data points</td></tr>
+        <tr><td>S4</td><td>4×4 Enchufes + 2 Data</td><td>16 sockets + 2 data points</td></tr>
+        <tr><td>SP</td><td>1 Enchufe + Data Proyector</td><td>Projector power + data circuit</td></tr>
+        <tr><td>SC</td><td>Cuadro</td><td>Distribution / switchboard</td></tr>
+        <tr><td>SA</td><td>Aire + 1 Enchufe</td><td>A/C unit + 1 socket</td></tr>
+        <tr><td>SK</td><td>Catering</td><td>Fridge, dishwasher, water heater, 100 L tank</td></tr>
+        <tr><td>ST</td><td>Toma Corriente</td><td>Single power outlet</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── ROOF KITS ── -->
+  <h2 id="roof-kits">Roof Kits</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Code</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>R_CLASS</td><td>Standard roof element for classroom modules</td></tr>
+        <tr><td>R_CORR</td><td>Standard roof element for corridor modules</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── MODES ── -->
+  <h2 id="modes">Select vs Build Mode</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">Default</div>
+      <div class="card-title">🖱️ Select Mode</div>
+      <div class="card-desc">Click to select modules, use the gizmo to move/rotate, right-click for the context menu.</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Build</div>
+      <div class="card-title">🧱 Build Mode</div>
+      <div class="card-desc">Click on the floor or on a module face to place a new module of the currently selected type.</div>
+    </div>
+  </div>
+  <p>Press <kbd>Escape</kbd> to exit Build mode. Switch between modes with the Select / Build toolbar buttons.</p>
+
+  <!-- ── MOUSE ── -->
+  <h2 id="mouse">Mouse Controls</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Action</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>Left-click (Select mode)</td><td>Select a module</td></tr>
+        <tr><td><kbd>Shift</kbd> + Left-click</td><td>Add / remove from multi-selection</td></tr>
+        <tr><td>Left-click (Build mode)</td><td>Place a new module at cursor position</td></tr>
+        <tr><td>Right-click on a module</td><td>Open context menu</td></tr>
+        <tr><td>Middle-drag</td><td>Pan the camera</td></tr>
+        <tr><td>Right-drag</td><td>Orbit the camera (3D view only)</td></tr>
+        <tr><td>Scroll wheel</td><td>Zoom toward the cursor (or floor point beneath it)</td></tr>
+        <tr><td><kbd>Shift</kbd> + Scroll</td><td>Pan horizontally / vertically</td></tr>
+        <tr><td>Drag a gizmo axis</td><td>Move or rotate the selected module(s)</td></tr>
+        <tr><td>Click a gizmo axis (no drag)</td><td>Enter a precise numeric offset in a prompt</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Trackpad Mode</h3>
+  <p>Enable the <strong>Trackpad Mode</strong> checkbox in the toolbar to remap gestures for laptop use:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Gesture</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>Two-finger drag</td><td>Orbit</td></tr>
+        <tr><td><kbd>Shift</kbd> + two-finger drag</td><td>Pan</td></tr>
+        <tr><td><kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + scroll (pinch)</td><td>Zoom</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Zoom Behaviour</h3>
+  <p>Zoom always centres toward the <strong>cursor position</strong>. If the cursor is over a module, zoom targets the hovered surface point. If over empty space, it targets the floor plane beneath the cursor. Zoom is disabled beyond 200 m and capped at 1 m minimum distance.</p>
+
+  <!-- ── KEYBOARD ── -->
+  <h2 id="keyboard">Keyboard Shortcuts</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Shortcut</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>Z</kbd></td><td>Undo (up to 10 steps)</td></tr>
+        <tr><td><kbd>Delete</kbd> / <kbd>Backspace</kbd></td><td>Delete selected module(s)</td></tr>
+        <tr><td><kbd>Escape</kbd></td><td>Cancel placement · deselect all · cancel OSNAP drag</td></tr>
+        <tr><td><kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>D</kbd></td><td>Activate OSNAP tool</td></tr>
+        <tr><td><kbd>Alt</kbd> + Gizmo drag</td><td>Duplicate selected module(s) while dragging</td></tr>
+        <tr><td><kbd>Alt</kbd> + OSNAP click</td><td>Duplicate selected module(s) at OSNAP drag start</td></tr>
+        <tr><td><kbd>Shift</kbd> / <kbd>Meta</kbd> (hold)</td><td>Switch middle-mouse from pan to orbit</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── GIZMO ── -->
+  <h2 id="gizmo">Transform Gizmo</h2>
+  <p>The <strong>Gizmo Mode</strong> button cycles through three states:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>State</th><th>Tool</th><th>Snap</th></tr></thead>
+      <tbody>
+        <tr><td>TRANSLATE</td><td>XYZ move arrows</td><td>Configurable (default 0.5 m)</td></tr>
+        <tr><td>ROTATE</td><td>XYZ rotation arcs</td><td>Fixed 15°</td></tr>
+        <tr><td>OSNAP</td><td>Vertex / edge snap drag</td><td>See OSNAP section</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout tip"><div class="callout-icon">💡</div><div><strong>Numeric offset:</strong> Clicking a gizmo arrow without dragging opens a text prompt. Enter a number to move / rotate by that exact amount along that axis. Great for precise positioning.</div></div>
+
+  <!-- ── OSNAP ── -->
+  <h2 id="osnap">OSNAP Tool</h2>
+  <p>OSNAP (Object Snap) works like a CAD snapping system — it locks the drag anchor to exact geometric points on the module's edges.</p>
+
+  <h3>Workflow</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Select modules + activate</div><div class="step-desc">Select one or more modules, then press <kbd>Ctrl</kbd>+<kbd>D</kbd> or cycle the Gizmo button to OSNAP.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Hover to preview</div><div class="step-desc">Move the cursor over the selected module(s). A coloured dot appears at the nearest snap point.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Click to begin drag</div><div class="step-desc">Click to anchor the drag to that exact snap point. Hold <kbd>Alt</kbd> before clicking to duplicate instead of move.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Hover target + click to drop</div><div class="step-desc">Hover over any other module — the snap dot moves to the nearest snap point on the target. Click to release.</div></div></div>
+  </div>
+
+  <h3>Snap Types</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Marker Colour</th><th>Type</th><th>Snaps To</th></tr></thead>
+      <tbody>
+        <tr><td><span class="snap-dot" style="background:#e74c3c"></span> Red</td><td>End</td><td>Vertices (corners) of edges</td></tr>
+        <tr><td><span class="snap-dot" style="background:#f1c40f"></span> Yellow</td><td>Midpoint</td><td>Centre of each edge</td></tr>
+        <tr><td><span class="snap-dot" style="background:#ffffff"></span> White</td><td>Nearest</td><td>Closest point on any edge to the cursor</td></tr>
+        <tr><td><span class="snap-dot" style="background:#9b59b6"></span> Purple</td><td>Centre</td><td>World-space centroid of the mesh</td></tr>
+        <tr><td><span class="snap-dot" style="background:#00ffff"></span> Cyan</td><td>Intersection</td><td>Where two edges cross in the XZ plane</td></tr>
+        <tr><td><span class="snap-dot" style="background:#e67e22"></span> Orange</td><td>Perpendicular</td><td>Point on a target edge perpendicular to the drag start vertex</td></tr>
+        <tr><td><span class="snap-dot" style="background:#333333;border:1px solid #555"></span> Dark</td><td>None</td><td>No snap found within 1.5 m</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Each snap type can be toggled independently via the checkboxes in the toolbar: <em>End, Midpoint, Intersection, Perpendicular, Nearest, Centre</em>.</p>
+  <p>The snap search radius scales with camera distance: <code>threshold = cameraDistance × 0.03</code> in 3D view, or <code>orthoHeight × 0.02</code> in Plan view.</p>
+
+  <!-- ── CONTEXT MENU ── -->
+  <h2 id="context-menu">Context Menu</h2>
+  <p>Right-click any selected module to open the context menu:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Option</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>⧉ Duplicate Module(s)</td><td>Clones the selection, offset by one global snap unit diagonally</td></tr>
+        <tr><td>⤾ Rotate +90°</td><td>Rotates the selection 90° around the Y axis</td></tr>
+        <tr><td>↻ Rotate 180°</td><td>Rotates the selection 180° around the Y axis</td></tr>
+        <tr><td>Swap to [type]</td><td>Changes the module type, grouped by family. Preserves position and rotation.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── PROPERTIES ── -->
+  <h2 id="properties">Properties Panel</h2>
+  <p>Appears automatically when one or more modules are selected.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Field</th><th>Single Selection</th><th>Multi-Selection</th></tr></thead>
+      <tbody>
+        <tr><td>Name / Description</td><td>Shows blueprint name and desc</td><td>Shows "Multiple Elements Selected"</td></tr>
+        <tr><td>Position X / Y / Z</td><td>Editable — applies on change</td><td>Disabled</td></tr>
+        <tr><td>Rotation X / Y / Z</td><td>Editable in degrees — applies on change</td><td>Disabled</td></tr>
+        <tr><td>Electrical Kit</td><td>Assign / change kit for this module</td><td>Assigns to all selected simultaneously</td></tr>
+        <tr><td>Roof Kit</td><td>Assign / change roof for this module</td><td>Assigns to all selected simultaneously</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── VIEWS ── -->
+  <h2 id="views">View Modes</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Button</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>2D Plan View</td><td>Orthographic top-down camera. Pan and zoom only — orbit is disabled.</td></tr>
+        <tr><td>3D Perspective</td><td>Returns to perspective camera with full orbit.</td></tr>
+        <tr><td>Zoom Extents</td><td>Fits all placed modules in view. Resets to origin if nothing is placed.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── FILES ── -->
+  <h2 id="files">File Operations</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Button</th><th>Format</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Save</td><td><code>.json</code></td><td>Full layout — positions, rotations, type keys, kit assignments. Uses <code>showSaveFilePicker</code> if available.</td></tr>
+        <tr><td>Load</td><td><code>.json</code></td><td>Clears the current scene and rebuilds from the saved file.</td></tr>
+        <tr><td>Export CSV</td><td><code>.csv</code></td><td>Full BOM snapshot at the moment of export.</td></tr>
+        <tr><td>Export GLTF</td><td><code>.gltf</code></td><td>3D geometry of all placed modules for coordination.</td></tr>
+        <tr><td>Export IFC</td><td>—</td><td>Not yet implemented — requires web-IFC integration.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── QC MODES ── -->
+  <h2 id="qc">QC Modes</h2>
+  <p>The QC toolbar provides four visualisation overlays. Clicking an active QC button toggles it off and returns to the default colour view.</p>
+  <div class="qc-grid">
+    <div class="qc-card">
+      <div class="qc-name" style="color:var(--blue)">⚡ Electrical</div>
+      <p>Modules <strong>with</strong> an electrical kit → shown in the kit's colour (solid). Modules <strong>without</strong> a kit → white, semi-transparent.</p>
+    </div>
+    <div class="qc-card">
+      <div class="qc-name" style="color:var(--teal)">🏠 Roof</div>
+      <p>Modules <strong>with</strong> a roof kit → shown in the kit's colour (solid). Modules <strong>without</strong> a roof → white, semi-transparent.</p>
+    </div>
+    <div class="qc-card">
+      <div class="qc-name" style="color:var(--orange)">🎨 Orientation</div>
+      <p>Replaces each module's colour with per-face materials: <strong style="color:#0984e3">blue</strong> = glazed facade, <strong style="color:#e17055">orange</strong> = corridor side, <strong style="color:#95a5a6">grey</strong> = structural wall, <em>transparent</em> = open face.</p>
+    </div>
+    <div class="qc-card">
+      <div class="qc-name" style="color:var(--red)">🔗 Links</div>
+      <p>All modules faded. <strong style="color:#3498db">Blue boxes</strong> = vertical stacking connections. <strong style="color:#e74c3c">Red boxes</strong> = horizontal classroom-to-classroom connections.</p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── CALC: DIMENSIONS ── -->
+  <h2 id="calc-dimensions">Calculation: Module Dimensions</h2>
+  <p>All modules use a single shared geometry: <strong>6 m long × 2.44 m wide × 3 m tall</strong>. This is the canonical Modulnor standard unit derived from the shipping-container standard cross-section. The <code>THREE.BoxGeometry</code> instance is shared in memory across all placed modules of the same type.</p>
+  <div class="callout note"><div class="callout-icon">ℹ️</div><div>The 2.44 m width is the standard internal clear width of a shipping container (external 2.438 m / 8 ft). The 6 m length corresponds to the half-length (20 ft container = 6.06 m nominal).</div></div>
+
+  <!-- ── CALC: LINKS ── -->
+  <h2 id="calc-links">Calculation: Link Detection</h2>
+  <p>Links are the structural connections at touching module interfaces. The algorithm is a pairwise O(n²) comparison over all placed blocks, running in <a href="https://github.com/ENZYME-APD/modulnor-school-configurator/blob/main/src/bom/linkDetector.ts"><code>src/bom/linkDetector.ts</code></a>.</p>
+
+  <h3>Step 1 — Proximity test</h3>
+  <p>Compute axis-aligned bounding boxes for each pair (B1, B2) and expand B1 by <strong>5 cm</strong> (<code>expandByScalar(0.05)</code>). Skip the pair if they don't intersect after expansion.</p>
+  <div class="callout note"><div class="callout-icon">ℹ️</div><div><strong>Why 5 cm?</strong> Modules placed face-to-face have exactly zero geometric overlap. The 5 cm tolerance captures intentional adjacencies even when modules are snapped together perfectly.</div></div>
+
+  <h3>Step 2 — Vertical vs horizontal classification</h3>
+  <p>Compute the vertical Y-axis separation: <code>dy = |B1.y − B2.y|</code>.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Condition</th><th>Classification</th></tr></thead>
+      <tbody>
+        <tr><td><code>dy &gt; 1.5 m</code> AND overlap footprint <code>&gt; 0.2 m × 0.2 m</code></td><td>→ <strong>Vertical (stacking) link</strong></td></tr>
+        <tr><td><code>dy &lt; 1.5 m</code> AND both modules are classrooms</td><td>→ Proceed to Step 3</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout note"><div class="callout-icon">ℹ️</div><div><strong>Why 1.5 m?</strong> Module height is 3 m. Same-floor modules share Y = 0 m (dy ≈ 0). Modules on adjacent floors differ by exactly 3 m. The 1.5 m threshold sits cleanly between these two cases.</div></div>
+
+  <h3>Step 3 — Horizontal link directionality</h3>
+  <p>Transform the direction vector <code>B2 − B1</code> into B1's local coordinate space (undoing B1's world rotation), then check:</p>
+  <pre>|localDir.z| &gt; 1.5  <span class="comment">// the connection is along the short dimension</span>
+|localDir.x| &lt; 5.0  <span class="comment">// the connection is not beside the module (long side)</span></pre>
+  <div class="callout note"><div class="callout-icon">ℹ️</div><div>The thresholds come from the module geometry: short dimension = 2.44 m (Z), long dimension = 6 m (X). The test confirms B2 is front or back of B1, not beside it.</div></div>
+
+  <h3>Step 4 — Wall count classification</h3>
+  <p>Determine which side of each module faces the other (<code>right</code> if <code>localDir.z > 0</code>, <code>left</code> otherwise). Look up the blueprint's wall definition for that side:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Walls at joint</th><th>Link Type</th><th>BOM item</th></tr></thead>
+      <tbody>
+        <tr><td>0 walls (both B-type open ends)</td><td><strong>Standard link</strong></td><td><code>LARGO_STANDARD</code></td></tr>
+        <tr><td>1 wall (one A- or C-type end)</td><td><strong>Panel link</strong></td><td><code>LARGO</code></td></tr>
+        <tr><td>2 walls (both closed ends meeting)</td><td><strong>Simple link</strong></td><td>No additional BOM item</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warning"><div class="callout-icon">⚠️</div><div><strong>Assumption:</strong> Only <code>classroom</code> group modules produce horizontal links. Corridors abutting classrooms are not counted as horizontal links — they are measured separately via the dynamic wall algorithm.</div></div>
+
+  <!-- ── CALC: WALLS ── -->
+  <h2 id="calc-walls">Calculation: Dynamic Corridor Walls</h2>
+  <p>For each <code>CorridorStructure</code> module, the algorithm (<a href="https://github.com/ENZYME-APD/modulnor-school-configurator/blob/main/src/qc/qcManager.ts"><code>src/qc/qcManager.ts — getDynamicWalls()</code></a>) determines which of its four vertical faces are <em>exposed</em> (not abutting another module). Each exposed face contributes wall panel material to the BOM.</p>
+
+  <h3>Method</h3>
+  <p>Expand the corridor module's bounding box by <strong>10 cm</strong>. For each neighbouring module at the same level (<code>dy &lt; 1.5 m</code>) that intersects this expanded box, transform the direction vector into local space and suppress the face in that direction.</p>
+
+  <h3>Wall dimensions per exposed face</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Face direction (local)</th><th>Dimension assumed</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>±X (short faces)</td><td><strong>2.44 m</strong> linear</td><td>Module width (short dimension)</td></tr>
+        <tr><td>±Z (long faces)</td><td><strong>6.00 m</strong> linear</td><td>Module length (long dimension)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The total is accumulated and emitted as BOM item <code>REV-DYN-WALL</code> (Corridor Dynamic Walls, in linear metres).</p>
+  <div class="callout warning"><div class="callout-icon">⚠️</div><div>Only <code>CorridorStructure</code> blocks generate dynamic walls. <code>CorridorFloor</code> blocks do not. Upper-floor neighbours (dy ≥ 1.5 m) do not suppress walls.</div></div>
+
+  <!-- ── CALC: BOM ── -->
+  <h2 id="calc-bom">Calculation: BOM Assembly</h2>
+  <p>The BOM is built by merging material lists from <code>bom.json</code> — an Excel-derived JSON file where each key corresponds to a module type code or kit code, and each value is a dictionary of <code>{ [itemId]: { name, qty } }</code> entries.</p>
+
+  <h3>Per placed block</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Lookup key</th><th>Trigger</th><th>Multiplier</th></tr></thead>
+      <tbody>
+        <tr><td><code>bom.json[b.typeKey]</code></td><td>Always</td><td>×1</td></tr>
+        <tr><td><code>bom.json["ESTRUCTURA"]</code></td><td>Classroom modules only</td><td>×1</td></tr>
+        <tr><td><code>bom.json[b.elecKey]</code></td><td>If electrical kit is assigned</td><td>×1</td></tr>
+        <tr><td><code>bom.json[b.roofKey]</code></td><td>If roof kit is assigned</td><td>×1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Per link type</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Link type</th><th>BOM key</th><th>Multiplier</th></tr></thead>
+      <tbody>
+        <tr><td>Standard links</td><td><code>LARGO_STANDARD</code></td><td>× count</td></tr>
+        <tr><td>Panel links</td><td><code>LARGO</code></td><td>× count</td></tr>
+        <tr><td>Simple links</td><td>—</td><td>No additional items</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>BOM grouping by category</h3>
+  <p>Items are grouped by the prefix of their part number:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Part ID prefix</th><th>Display Category</th></tr></thead>
+      <tbody>
+        <tr><td><code>ELEC</code>, <code>CAB</code>, <code>MEC</code></td><td>Electrical Equipment</td></tr>
+        <tr><td><code>PER</code>, <code>EST</code></td><td>Metal Profiles</td></tr>
+        <tr><td><code>REV</code>, <code>PAN</code></td><td>Walls & Finishes</td></tr>
+        <tr><td><code>FONT</code>, <code>SANI</code></td><td>Toilet & Plumbing</td></tr>
+        <tr><td><code>CARP</code>, <code>PUE</code>, <code>VEN</code></td><td>Doors & Windows</td></tr>
+        <tr><td><em>Anything else</em></td><td>Miscellaneous</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── CALC: FEE ── -->
+  <h2 id="calc-fee">Calculation: Project Fee</h2>
+  <p>The project fee is a simple sum of per-module unit costs:</p>
+  <pre>totalFee = Σ blueprint[b.typeKey].cost  <span class="comment">for all placed blocks</span></pre>
+  <div class="callout warning"><div class="callout-icon">⚠️</div><div><strong>Placeholder values.</strong> The current unit costs (€10 classrooms, €15 restrooms, €4–6 corridors) are indicative placeholders defined in <code>src/data/blueprints.ts</code>. They do not reflect real procurement costs and must be updated before using the fee estimate commercially.</div></div>
+
+  <!-- ── CALC: UNDO ── -->
+  <h2 id="calc-undo">Undo History</h2>
+  <p>The undo stack captures a full scene snapshot before every state-changing operation (placement, deletion, move, type swap, kit assignment). Each snapshot stores per-block: <strong>type key, world position, world rotation, electrical kit, roof kit</strong>.</p>
+  <p>The stack is capped at <strong>10 entries</strong>. On undo, the current scene is fully cleared and rebuilt from the snapshot.</p>
+
+  <!-- ── CALC: CSV ── -->
+  <h2 id="calc-csv">CSV Export Format</h2>
+  <pre>Category, Item ID, Item Name, Quantity
+Modules,, Classrooms, [n]
+Modules,, Corridors, [n]
+BOM - [Category], [ID], [Name], [qty]
+...
+Electrical Kits, [code], [name], [count]
+Roofs, [code], [name], [count]
+Adosamientos,, Largo Standard, [n]
+Adosamientos,, Largo Panel, [n]
+Adosamientos,, Simples, [n]
+Adosamientos,, Conexiones Verticales, [n]
+Project Fee,, Total Fee (EUR), [total]</pre>
+  <div class="callout warning"><div class="callout-icon">⚠️</div><div>The CSV is a snapshot taken at the moment the Export button is clicked. If the layout changed after the BOQ panel last updated, the export reflects the last-computed state.</div></div>
+
+  <hr class="divider" />
+
+  <!-- ── CODE STRUCTURE ── -->
+  <h2 id="code-structure">Source Code Structure</h2>
+  <pre>src/
+├── data/           <span class="comment">Pure data — blueprints, kits, BOM category map</span>
+├── modules/        <span class="comment">Stateless utilities — applyModuleStyle, history (undo)</span>
+├── tools/          <span class="comment">Interaction tools — OSNAP engine, selection manager</span>
+├── qc/             <span class="comment">QC visualisation — dynamic walls, colour overlays</span>
+├── bom/            <span class="comment">Quantity engine — link detection, BOM assembly, exporters</span>
+├── ui/             <span class="comment">UI panels — properties panel</span>
+├── store.ts        <span class="comment">Single shared mutable state object</span>
+├── types.ts        <span class="comment">TypeScript interfaces and union types</span>
+└── main.ts         <span class="comment">Scene setup + event wiring (~450 lines)</span></pre>
+
+</main>
+</div>
+
+<!-- ═════════════════════════ FOOTER ══════════════════════════════ -->
+<footer>
+  <span>© ENZYME APD — Modulnor School Configurator</span>
+  <a href="https://github.com/ENZYME-APD/modulnor-school-configurator">GitHub Repository</a>
+  <span style="margin-left:auto;color:var(--text-dim)">Docs generated from source @ <code style="font-size:.78rem">main</code></span>
+</footer>
+
+<script>
+  // Highlight active nav link on scroll
+  const headings = document.querySelectorAll('h2[id], h3[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-60px 0px -70% 0px' });
+  headings.forEach(h => observer.observe(h));
+</script>
+</body>
+</html>
