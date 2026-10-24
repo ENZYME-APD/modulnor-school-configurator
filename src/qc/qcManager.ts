@@ -4,7 +4,9 @@ import { store } from "../store";
 import { blueprints } from "../data/blueprints";
 import { electricalKits } from "../data/electricalKits";
 import { roofKits } from "../data/roofKits";
-import { detectLinks } from "../bom/linkDetector";
+import { detectLinks, computeModuleBoxes } from "../bom/linkDetector";
+import { getBaseMaterial } from "../modules/moduleStyle";
+import { invalidate } from "../scene/invalidate";
 
 // ── Materials shared across all QC orient renders ─────────────────────────────
 
@@ -35,15 +37,14 @@ export function initQCManager(scene: THREE.Scene): void {
 export function getDynamicWalls(
   b1:        PlacedModule,
   allBlocks: PlacedModule[],
+  boxes:     Map<PlacedModule, THREE.Box3> = computeModuleBoxes(allBlocks),
 ): { posX: boolean; negX: boolean; posZ: boolean; negZ: boolean } {
   const dynWalls = { posX: true, negX: true, posZ: true, negZ: true };
-  const box1 = new THREE.Box3().setFromObject(b1.mesh);
-  box1.expandByScalar(0.1);
+  const box1 = boxes.get(b1)!.clone().expandByScalar(0.1);
 
   allBlocks.forEach((b2) => {
     if (b1 === b2) return;
-    const box2 = new THREE.Box3().setFromObject(b2.mesh);
-    if (!box1.intersectsBox(box2)) return;
+    if (!box1.intersectsBox(boxes.get(b2)!)) return;
 
     const dy = Math.abs(b1.mesh.position.y - b2.mesh.position.y);
     if (dy >= 1.5) return;
@@ -92,13 +93,15 @@ export function refreshQCColors(): void {
     }
   }
 
+  const boxes = store.activeQC === "orient" ? computeModuleBoxes(store.placedBlocks) : undefined;
+
   store.placedBlocks.forEach((b) => {
     const bp = blueprints[b.typeKey];
 
     // ── Orient mode: per-face material ───────────────────────────────────────
     if (store.activeQC === "orient") {
       if (bp.group === "corridor" && b.typeKey === "CorridorStructure") {
-        const dw = getDynamicWalls(b, store.placedBlocks);
+        const dw = getDynamicWalls(b, store.placedBlocks, boxes);
         b.mesh.material = [
           dw.posX ? orientMats.wall : orientMats.transparent,
           dw.negX ? orientMats.wall : orientMats.transparent,
@@ -124,14 +127,9 @@ export function refreshQCColors(): void {
       return;
     }
 
-    // ── Reset to single material if switching away from orient ────────────────
-    if (Array.isArray(b.mesh.material)) {
-      b.mesh.material = new THREE.MeshStandardMaterial({
-        color: bp.color, roughness: 0.7, metalness: 0.1, transparent: true, opacity: 0.9,
-      });
-    }
-
-    const mat = b.mesh.material as THREE.MeshStandardMaterial;
+    // ── Restore the module's own material (orient mode swaps in shared arrays) ─
+    const mat = getBaseMaterial(b.mesh);
+    b.mesh.material = mat;
 
     // ── Elec mode ────────────────────────────────────────────────────────────
     if (store.activeQC === "elec") {
@@ -161,7 +159,7 @@ export function refreshQCColors(): void {
     // ── Default / no QC ───────────────────────────────────────────────────────
     } else {
       mat.color.set(bp.color);
-      mat.transparent = true; mat.opacity = 0.9; mat.depthWrite = true;
+      mat.transparent = false; mat.opacity = 1.0; mat.depthWrite = true;
     }
 
     mat.needsUpdate = true;
@@ -193,4 +191,6 @@ export function refreshQCColors(): void {
       qcLinksGroup.add(edgeLines);
     });
   }
+
+  invalidate();
 }

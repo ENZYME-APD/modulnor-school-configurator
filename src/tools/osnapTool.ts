@@ -137,7 +137,8 @@ export function performOsnap(
 ): { point: THREE.Vector3; type: SnapType } | null {
   const dist = activeCamera.position.distanceTo(orbitTarget);
   (raycaster.params as any).Line = {
-    threshold: isPlanView ? (cameraOrtho.top - cameraOrtho.bottom) * 0.02 : dist * 0.03,
+    // Ortho frustum height shrinks as zoom grows, so scale the pick tolerance with it
+    threshold: isPlanView ? ((cameraOrtho.top - cameraOrtho.bottom) / cameraOrtho.zoom) * 0.02 : dist * 0.03,
   };
 
   const outlines = validMeshes

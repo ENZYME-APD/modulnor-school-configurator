@@ -19,6 +19,23 @@ export interface LinkResult {
   visualizations: LinkVisualization[];
 }
 
+// ── Bounding boxes ────────────────────────────────────────────────────────────
+
+/**
+ * World-space AABB per module, computed once per pass from the shared
+ * geometry's bounding box (much cheaper than Box3.setFromObject per pair).
+ */
+export function computeModuleBoxes(allBlocks: PlacedModule[]): Map<PlacedModule, THREE.Box3> {
+  const boxes = new Map<PlacedModule, THREE.Box3>();
+  for (const b of allBlocks) {
+    const geom = b.mesh.geometry;
+    if (!geom.boundingBox) geom.computeBoundingBox();
+    b.mesh.updateWorldMatrix(true, false);
+    boxes.set(b, geom.boundingBox!.clone().applyMatrix4(b.mesh.matrixWorld));
+  }
+  return boxes;
+}
+
 // ── Detector ──────────────────────────────────────────────────────────────────
 
 /**
@@ -28,7 +45,10 @@ export interface LinkResult {
  * `refreshQCColors()` and `updateCostUI()`. This single implementation
  * is now shared by both callers.
  */
-export function detectLinks(allBlocks: PlacedModule[]): LinkResult {
+export function detectLinks(
+  allBlocks: PlacedModule[],
+  boxes: Map<PlacedModule, THREE.Box3> = computeModuleBoxes(allBlocks),
+): LinkResult {
   let standardLinks = 0, panelLinks = 0, simpleLinks = 0, verticalLinks = 0;
   const visualizations: LinkVisualization[] = [];
 
@@ -37,9 +57,8 @@ export function detectLinks(allBlocks: PlacedModule[]): LinkResult {
       const b1 = allBlocks[i];
       const b2 = allBlocks[j];
 
-      const box1 = new THREE.Box3().setFromObject(b1.mesh);
-      const box2 = new THREE.Box3().setFromObject(b2.mesh);
-      box1.expandByScalar(0.05);
+      const box1 = boxes.get(b1)!.clone().expandByScalar(0.05);
+      const box2 = boxes.get(b2)!;
 
       if (!box1.intersectsBox(box2)) continue;
 

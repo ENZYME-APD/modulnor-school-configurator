@@ -80,12 +80,17 @@ The app will be available at `http://localhost:5173` (or the next available port
 ```
 ThatModularApp/
 ├── src/
-│   ├── main.ts              # Application entry point — scene setup, UI, event handling
+│   ├── main.ts              # Entry point — interaction, UI wiring, event handling
+│   ├── scene/               # Viewer: renderer, cameras, lighting, AO, navigation, on-demand render loop
+│   ├── modules/             # Module styling, placement/removal, undo history
+│   ├── tools/               # Selection and OSNAP tools
+│   ├── qc/                  # QC colour modes and corridor wall detection
+│   ├── bom/                 # BOM/cost calculation, link detection, save/load/export
+│   ├── ui/                  # Properties panel
+│   ├── data/                # Module blueprints, electrical and roof kits
+│   ├── store.ts / types.ts  # Shared app state and types
 │   ├── style.css            # Global styles
-│   ├── globals.ts           # Shared types and constants
-│   ├── bom.json             # Compiled Bill of Materials data
-│   ├── bim-components/      # Custom ThatOpen component extensions
-│   └── ui-templates/        # HTML UI panel templates
+│   └── bom.json             # Compiled Bill of Materials data
 │
 ├── *_excel/                 # Source Excel datasets per building system
 │   ├── structure_excel/

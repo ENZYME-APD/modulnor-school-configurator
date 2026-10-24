@@ -3,7 +3,7 @@ import { store } from "../store";
 import { blueprints } from "../data/blueprints";
 import { roofKits } from "../data/roofKits";
 import { getCategory } from "../data/categoryMap";
-import { detectLinks } from "./linkDetector";
+import { detectLinks, computeModuleBoxes } from "./linkDetector";
 import { getDynamicWalls } from "../qc/qcManager";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -47,6 +47,7 @@ export function updateCostUI(): void {
   const roofCounts:  Record<string, number> = {};
   const feeCounts:   Record<string, number> = {};
   const shoppingCart: ShoppingCart = {};
+  const boxes = computeModuleBoxes(store.placedBlocks);
 
   store.placedBlocks.forEach((b) => {
     const bp = blueprints[b.typeKey];
@@ -59,7 +60,7 @@ export function updateCostUI(): void {
     if (bp.group === "corridor") {
       corridorCount++;
       if (b.typeKey === "CorridorStructure") {
-        const dw = getDynamicWalls(b, store.placedBlocks);
+        const dw = getDynamicWalls(b, store.placedBlocks, boxes);
         if (dw.posX) dynamicWallMeters += 2.44;
         if (dw.negX) dynamicWallMeters += 2.44;
         if (dw.posZ) dynamicWallMeters += 6.00;
@@ -86,7 +87,7 @@ export function updateCostUI(): void {
 
   // Shared link detector — previously duplicated here and in refreshQCColors
   const { standardLinks, panelLinks, simpleLinks, verticalLinks } =
-    detectLinks(store.placedBlocks);
+    detectLinks(store.placedBlocks, boxes);
 
   if (standardLinks > 0) addBomToCart(shoppingCart, "LARGO_STANDARD", standardLinks);
   if (panelLinks    > 0) addBomToCart(shoppingCart, "LARGO",           panelLinks);
@@ -125,7 +126,7 @@ export function updateCostUI(): void {
 
   let roofHTML = "";
   for (const [key, count] of Object.entries(roofCounts))
-    roofHTML += `<div style="display:flex;justify-content:space-between;color:#ccc"><span>${roofKits[key].name}:</span><span>${count}</span></div>`;
+    roofHTML += `<div style="display:flex;justify-content:space-between;color:#ccc"><span>${roofKits[key]?.name ?? key}:</span><span>${count}</span></div>`;
   document.getElementById("boq-roof-list")!.innerHTML =
     roofHTML || `<div style="color:#666;font-style:italic">No roofs assigned</div>`;
 
