@@ -46,6 +46,10 @@ module.exports = {
     ],
     "import/prefer-default-export": "off",
     "no-plusplus": "off",
+    // alert/confirm/prompt are the app's intentional lightweight dialogs
+    "no-alert": "off",
+    // function declarations are hoisted; only flag variables/classes used early
+    "no-use-before-define": ["error", { functions: false, classes: true, variables: true }],
   },
   settings: {
     "import/resolver": {

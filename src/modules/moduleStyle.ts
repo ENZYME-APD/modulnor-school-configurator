@@ -23,9 +23,11 @@ export function getBlueprintEdges(typeKey: string): THREE.EdgesGeometry {
 }
 
 /** Creates the default PBR material for a blueprint type. */
-export function createBaseMaterial(typeKey: string): THREE.MeshStandardMaterial {
+export function createBaseMaterial(
+  typeKey: string,
+): THREE.MeshStandardMaterial {
   return new THREE.MeshStandardMaterial({
-    color:     blueprints[typeKey].color,
+    color: blueprints[typeKey].color,
     roughness: 0.65,
     metalness: 0.0,
     envMapIntensity: 0.9,
@@ -67,7 +69,10 @@ export function applyModuleStyle(mesh: THREE.Mesh, typeKey: string): void {
   mesh.children.slice().forEach((c) => {
     if (c.userData.isBlackOutline) mesh.remove(c);
   });
-  const line = new THREE.LineSegments(getBlueprintEdges(typeKey), outlineMaterial);
+  const line = new THREE.LineSegments(
+    getBlueprintEdges(typeKey),
+    outlineMaterial,
+  );
   line.userData.isBlackOutline = true;
   mesh.add(line);
 }

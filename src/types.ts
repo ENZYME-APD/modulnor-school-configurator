@@ -40,4 +40,11 @@ export interface SceneSnapshot {
 
 export type QCMode = "none" | "elec" | "links" | "roof" | "orient";
 export type ToolState = "translate" | "rotate" | "osnap";
-export type SnapType = "end" | "mid" | "near" | "center" | "int" | "perp" | "none";
+export type SnapType =
+  | "end"
+  | "mid"
+  | "near"
+  | "center"
+  | "int"
+  | "perp"
+  | "none";

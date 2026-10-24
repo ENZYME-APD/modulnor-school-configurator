@@ -24,12 +24,13 @@ export function createModule(spec: ModuleSpec): PlacedModule {
   const mesh = new THREE.Mesh();
   applyModuleStyle(mesh, spec.typeKey);
   mesh.position.copy(spec.position);
-  if (spec.rotation instanceof THREE.Quaternion) mesh.quaternion.copy(spec.rotation);
+  if (spec.rotation instanceof THREE.Quaternion)
+    mesh.quaternion.copy(spec.rotation);
   else mesh.rotation.copy(spec.rotation);
   _scene.add(mesh);
 
   const placed: PlacedModule = {
-    id:      spec.id ?? crypto.randomUUID(),
+    id: spec.id ?? crypto.randomUUID(),
     typeKey: spec.typeKey,
     elecKey: spec.elecKey,
     roofKey: spec.roofKey,
@@ -48,7 +49,10 @@ export function findModule(mesh: THREE.Object3D): PlacedModule | undefined {
  * Duplicates the given meshes in world space, optionally offset.
  * Returns the new meshes (caller decides what to select).
  */
-export function duplicateModules(meshes: Iterable<THREE.Mesh>, offset?: THREE.Vector3): THREE.Mesh[] {
+export function duplicateModules(
+  meshes: Iterable<THREE.Mesh>,
+  offset?: THREE.Vector3,
+): THREE.Mesh[] {
   const created: THREE.Mesh[] = [];
   for (const mesh of meshes) {
     const src = findModule(mesh);
@@ -56,9 +60,9 @@ export function duplicateModules(meshes: Iterable<THREE.Mesh>, offset?: THREE.Ve
     const position = mesh.getWorldPosition(new THREE.Vector3());
     if (offset) position.add(offset);
     const placed = createModule({
-      typeKey:  src.typeKey,
-      elecKey:  src.elecKey,
-      roofKey:  src.roofKey,
+      typeKey: src.typeKey,
+      elecKey: src.elecKey,
+      roofKey: src.roofKey,
       position,
       rotation: mesh.getWorldQuaternion(new THREE.Quaternion()),
     });

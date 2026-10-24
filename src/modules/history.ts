@@ -18,12 +18,12 @@ function snapshot(): SceneSnapshot {
     blocks: store.placedBlocks.map((b) => {
       const wQuat = b.mesh.getWorldQuaternion(new THREE.Quaternion());
       return {
-        id:      b.id,
+        id: b.id,
         typeKey: b.typeKey,
         elecKey: b.elecKey,
         roofKey: b.roofKey,
-        pos:     b.mesh.getWorldPosition(new THREE.Vector3()),
-        rot:     new THREE.Euler().setFromQuaternion(wQuat),
+        pos: b.mesh.getWorldPosition(new THREE.Vector3()),
+        rot: new THREE.Euler().setFromQuaternion(wQuat),
       };
     }),
   };
@@ -47,8 +47,12 @@ export function undo(callbacks: UndoCallbacks): void {
 
   lastState.blocks.forEach((b) =>
     createModule({
-      id: b.id, typeKey: b.typeKey, elecKey: b.elecKey, roofKey: b.roofKey,
-      position: b.pos, rotation: b.rot,
+      id: b.id,
+      typeKey: b.typeKey,
+      elecKey: b.elecKey,
+      roofKey: b.roofKey,
+      position: b.pos,
+      rotation: b.rot,
     }),
   );
 

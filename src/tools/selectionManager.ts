@@ -8,25 +8,27 @@ import { invalidate } from "../scene/invalidate";
 // ── Visual state ──────────────────────────────────────────────────────────────
 
 const selectionOutlines = new Map<THREE.Mesh, THREE.LineSegments>();
-const outlineMaterial   = new THREE.LineBasicMaterial({
-  color: 0x2ecc71, depthTest: false, transparent: true,
+const outlineMaterial = new THREE.LineBasicMaterial({
+  color: 0x2ecc71,
+  depthTest: false,
+  transparent: true,
 });
 
 // ── Scene references (initialised via initSelectionManager) ──────────────────
 
-let _scene:             THREE.Scene;
+let _scene: THREE.Scene;
 let _transformControls: TransformControls;
-let _transformGroup:    THREE.Group;
+let _transformGroup: THREE.Group;
 
 /** Must be called once with the scene objects created in main.ts. */
 export function initSelectionManager(deps: {
-  scene:             THREE.Scene;
+  scene: THREE.Scene;
   transformControls: TransformControls;
-  transformGroup:    THREE.Group;
+  transformGroup: THREE.Group;
 }): void {
-  _scene             = deps.scene;
+  _scene = deps.scene;
   _transformControls = deps.transformControls;
-  _transformGroup    = deps.transformGroup;
+  _transformGroup = deps.transformGroup;
 }
 
 // ── Selection Logic ───────────────────────────────────────────────────────────
@@ -44,7 +46,8 @@ export function updateSelection(mesh: THREE.Mesh | null, multi: boolean): void {
 
   if (!multi) store.selectedBlocks.clear();
   if (mesh) {
-    if (multi && store.selectedBlocks.has(mesh)) store.selectedBlocks.delete(mesh);
+    if (multi && store.selectedBlocks.has(mesh))
+      store.selectedBlocks.delete(mesh);
     else store.selectedBlocks.add(mesh);
   }
 
@@ -63,7 +66,10 @@ export function updateSelection(mesh: THREE.Mesh | null, multi: boolean): void {
     }
 
     if (isSelected) {
-      const line = new THREE.LineSegments(getBlueprintEdges(b.typeKey), outlineMaterial);
+      const line = new THREE.LineSegments(
+        getBlueprintEdges(b.typeKey),
+        outlineMaterial,
+      );
       line.renderOrder = 10;
       b.mesh.add(line);
       selectionOutlines.set(b.mesh, line);

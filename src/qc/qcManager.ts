@@ -11,11 +11,33 @@ import { invalidate } from "../scene/invalidate";
 // ── Materials shared across all QC orient renders ─────────────────────────────
 
 const orientMats = {
-  transparent: new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.1, depthWrite: false }),
-  wall:        new THREE.MeshStandardMaterial({ color: 0x95a5a6, transparent: false, opacity: 1.0 }),
-  facade:      new THREE.MeshStandardMaterial({ color: 0x0984e3, transparent: true,  opacity: 0.85 }),
-  corridor:    new THREE.MeshStandardMaterial({ color: 0xe17055, transparent: true,  opacity: 0.85 }),
-  floor:       new THREE.MeshStandardMaterial({ color: 0x2d3436, transparent: true,  opacity: 0.4, side: THREE.DoubleSide }),
+  transparent: new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.1,
+    depthWrite: false,
+  }),
+  wall: new THREE.MeshStandardMaterial({
+    color: 0x95a5a6,
+    transparent: false,
+    opacity: 1.0,
+  }),
+  facade: new THREE.MeshStandardMaterial({
+    color: 0x0984e3,
+    transparent: true,
+    opacity: 0.85,
+  }),
+  corridor: new THREE.MeshStandardMaterial({
+    color: 0xe17055,
+    transparent: true,
+    opacity: 0.85,
+  }),
+  floor: new THREE.MeshStandardMaterial({
+    color: 0x2d3436,
+    transparent: true,
+    opacity: 0.4,
+    side: THREE.DoubleSide,
+  }),
 };
 
 // ── Module-level scene refs (set via initQCManager) ───────────────────────────
@@ -35,9 +57,9 @@ export function initQCManager(scene: THREE.Scene): void {
  * Used both for QC orientation colouring and for corridor wall BOM counting.
  */
 export function getDynamicWalls(
-  b1:        PlacedModule,
+  b1: PlacedModule,
   allBlocks: PlacedModule[],
-  boxes:     Map<PlacedModule, THREE.Box3> = computeModuleBoxes(allBlocks),
+  boxes: Map<PlacedModule, THREE.Box3> = computeModuleBoxes(allBlocks),
 ): { posX: boolean; negX: boolean; posZ: boolean; negZ: boolean } {
   const dynWalls = { posX: true, negX: true, posZ: true, negZ: true };
   const box1 = boxes.get(b1)!.clone().expandByScalar(0.1);
@@ -61,10 +83,10 @@ export function getDynamicWalls(
       );
 
     if (Math.abs(localDir.x) > Math.abs(localDir.z)) {
-      if (localDir.x >  1.0) dynWalls.posX = false;
+      if (localDir.x > 1.0) dynWalls.posX = false;
       if (localDir.x < -1.0) dynWalls.negX = false;
     } else {
-      if (localDir.z >  1.0) dynWalls.posZ = false;
+      if (localDir.z > 1.0) dynWalls.posZ = false;
       if (localDir.z < -1.0) dynWalls.negZ = false;
     }
   });
@@ -88,12 +110,16 @@ export function refreshQCColors(): void {
     qcLinksGroup.remove(child);
     child.geometry.dispose();
     if (child.material) {
-      if (Array.isArray(child.material)) child.material.forEach((m) => m.dispose());
+      if (Array.isArray(child.material))
+        child.material.forEach((m) => m.dispose());
       else (child.material as THREE.Material).dispose();
     }
   }
 
-  const boxes = store.activeQC === "orient" ? computeModuleBoxes(store.placedBlocks) : undefined;
+  const boxes =
+    store.activeQC === "orient"
+      ? computeModuleBoxes(store.placedBlocks)
+      : undefined;
 
   store.placedBlocks.forEach((b) => {
     const bp = blueprints[b.typeKey];
@@ -112,16 +138,21 @@ export function refreshQCColors(): void {
         ];
       } else if (bp.group === "corridor" && b.typeKey === "CorridorFloor") {
         b.mesh.material = [
-          orientMats.transparent, orientMats.transparent,
-          orientMats.transparent, orientMats.floor,
-          orientMats.transparent, orientMats.transparent,
+          orientMats.transparent,
+          orientMats.transparent,
+          orientMats.transparent,
+          orientMats.floor,
+          orientMats.transparent,
+          orientMats.transparent,
         ];
       } else {
         b.mesh.material = [
-          orientMats.corridor, orientMats.facade,
-          orientMats.floor,    orientMats.floor,
+          orientMats.corridor,
+          orientMats.facade,
+          orientMats.floor,
+          orientMats.floor,
           bp.walls.right ? orientMats.wall : orientMats.transparent,
-          bp.walls.left  ? orientMats.wall : orientMats.transparent,
+          bp.walls.left ? orientMats.wall : orientMats.transparent,
         ];
       }
       return;
@@ -135,31 +166,43 @@ export function refreshQCColors(): void {
     if (store.activeQC === "elec") {
       if (b.elecKey && electricalKits[b.elecKey]) {
         mat.color.set(electricalKits[b.elecKey].color);
-        mat.transparent = false; mat.opacity = 1.0; mat.depthWrite = true;
+        mat.transparent = false;
+        mat.opacity = 1.0;
+        mat.depthWrite = true;
       } else {
         mat.color.setHex(0xffffff);
-        mat.transparent = true; mat.opacity = 0.5; mat.depthWrite = false;
+        mat.transparent = true;
+        mat.opacity = 0.5;
+        mat.depthWrite = false;
       }
 
-    // ── Roof mode ─────────────────────────────────────────────────────────────
+      // ── Roof mode ─────────────────────────────────────────────────────────────
     } else if (store.activeQC === "roof") {
       if (b.roofKey && roofKits[b.roofKey]) {
         mat.color.set(roofKits[b.roofKey].color);
-        mat.transparent = false; mat.opacity = 1.0; mat.depthWrite = true;
+        mat.transparent = false;
+        mat.opacity = 1.0;
+        mat.depthWrite = true;
       } else {
         mat.color.setHex(0xffffff);
-        mat.transparent = true; mat.opacity = 0.5; mat.depthWrite = false;
+        mat.transparent = true;
+        mat.opacity = 0.5;
+        mat.depthWrite = false;
       }
 
-    // ── Links mode (fade blocks) ──────────────────────────────────────────────
+      // ── Links mode (fade blocks) ──────────────────────────────────────────────
     } else if (store.activeQC === "links") {
       mat.color.set(bp.color);
-      mat.transparent = true; mat.opacity = 0.25; mat.depthWrite = false;
+      mat.transparent = true;
+      mat.opacity = 0.25;
+      mat.depthWrite = false;
 
-    // ── Default / no QC ───────────────────────────────────────────────────────
+      // ── Default / no QC ───────────────────────────────────────────────────────
     } else {
       mat.color.set(bp.color);
-      mat.transparent = false; mat.opacity = 1.0; mat.depthWrite = true;
+      mat.transparent = false;
+      mat.opacity = 1.0;
+      mat.depthWrite = true;
     }
 
     mat.needsUpdate = true;
@@ -170,7 +213,7 @@ export function refreshQCColors(): void {
     const { visualizations } = detectLinks(store.placedBlocks);
     visualizations.forEach(({ center, size, isVertical }) => {
       const color = isVertical ? 0x3498db : 0xff0000;
-      const geom  = new THREE.BoxGeometry(
+      const geom = new THREE.BoxGeometry(
         Math.max(size.x, 0.05),
         Math.max(size.y, 0.05),
         Math.max(size.z, 0.05),
@@ -178,7 +221,12 @@ export function refreshQCColors(): void {
 
       const fillMesh = new THREE.Mesh(
         geom,
-        new THREE.MeshBasicMaterial({ color, depthTest: false, transparent: true, opacity: 0.6 }),
+        new THREE.MeshBasicMaterial({
+          color,
+          depthTest: false,
+          transparent: true,
+          opacity: 0.6,
+        }),
       );
       fillMesh.position.copy(center);
       qcLinksGroup.add(fillMesh);
