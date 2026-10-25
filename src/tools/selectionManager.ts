@@ -19,16 +19,20 @@ const outlineMaterial = new THREE.LineBasicMaterial({
 let _scene: THREE.Scene;
 let _transformControls: TransformControls;
 let _transformGroup: THREE.Group;
+let _onSelectionChange: () => void = () => {};
 
 /** Must be called once with the scene objects created in main.ts. */
 export function initSelectionManager(deps: {
   scene: THREE.Scene;
   transformControls: TransformControls;
   transformGroup: THREE.Group;
+  /** Called after every selection change (e.g. to refresh the properties panel). */
+  onSelectionChange?: () => void;
 }): void {
   _scene = deps.scene;
   _transformControls = deps.transformControls;
   _transformGroup = deps.transformGroup;
+  if (deps.onSelectionChange) _onSelectionChange = deps.onSelectionChange;
 }
 
 // ── Selection Logic ───────────────────────────────────────────────────────────
@@ -96,6 +100,7 @@ export function updateSelection(mesh: THREE.Mesh | null, multi: boolean): void {
     _transformControls.detach();
   }
 
+  _onSelectionChange();
   invalidate();
 }
 

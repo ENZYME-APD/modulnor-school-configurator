@@ -62,7 +62,12 @@ overlay.add(snapMarker);
 
 initPlacement(scene);
 initQCManager(overlay);
-initSelectionManager({ scene, transformControls, transformGroup });
+initSelectionManager({
+  scene,
+  transformControls,
+  transformGroup,
+  onSelectionChange: updatePropertiesUI,
+});
 initPropertiesPanel({
   onSaveState: saveState,
   onCostUpdate: () => afterLayoutChange(),
