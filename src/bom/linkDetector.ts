@@ -5,18 +5,37 @@ import { blueprints } from "../data/blueprints";
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface LinkVisualization {
-  center:     THREE.Vector3;
-  size:       THREE.Vector3;
+  center: THREE.Vector3;
+  size: THREE.Vector3;
   isVertical: boolean;
 }
 
 export interface LinkResult {
-  standardLinks:  number;
-  panelLinks:     number;
-  simpleLinks:    number;
-  verticalLinks:  number;
+  standardLinks: number;
+  panelLinks: number;
+  simpleLinks: number;
+  verticalLinks: number;
   /** All detected links that should be rendered in QC Links mode. */
   visualizations: LinkVisualization[];
+}
+
+// ── Bounding boxes ────────────────────────────────────────────────────────────
+
+/**
+ * World-space AABB per module, computed once per pass from the shared
+ * geometry's bounding box (much cheaper than Box3.setFromObject per pair).
+ */
+export function computeModuleBoxes(
+  allBlocks: PlacedModule[],
+): Map<PlacedModule, THREE.Box3> {
+  const boxes = new Map<PlacedModule, THREE.Box3>();
+  for (const b of allBlocks) {
+    const geom = b.mesh.geometry;
+    if (!geom.boundingBox) geom.computeBoundingBox();
+    b.mesh.updateWorldMatrix(true, false);
+    boxes.set(b, geom.boundingBox!.clone().applyMatrix4(b.mesh.matrixWorld));
+  }
+  return boxes;
 }
 
 // ── Detector ──────────────────────────────────────────────────────────────────
@@ -28,8 +47,14 @@ export interface LinkResult {
  * `refreshQCColors()` and `updateCostUI()`. This single implementation
  * is now shared by both callers.
  */
-export function detectLinks(allBlocks: PlacedModule[]): LinkResult {
-  let standardLinks = 0, panelLinks = 0, simpleLinks = 0, verticalLinks = 0;
+export function detectLinks(
+  allBlocks: PlacedModule[],
+  boxes: Map<PlacedModule, THREE.Box3> = computeModuleBoxes(allBlocks),
+): LinkResult {
+  let standardLinks = 0;
+  let panelLinks = 0;
+  let simpleLinks = 0;
+  let verticalLinks = 0;
   const visualizations: LinkVisualization[] = [];
 
   for (let i = 0; i < allBlocks.length; i++) {
@@ -37,14 +62,13 @@ export function detectLinks(allBlocks: PlacedModule[]): LinkResult {
       const b1 = allBlocks[i];
       const b2 = allBlocks[j];
 
-      const box1 = new THREE.Box3().setFromObject(b1.mesh);
-      const box2 = new THREE.Box3().setFromObject(b2.mesh);
-      box1.expandByScalar(0.05);
+      const box1 = boxes.get(b1)!.clone().expandByScalar(0.05);
+      const box2 = boxes.get(b2)!;
 
       if (!box1.intersectsBox(box2)) continue;
 
       const overlap = box1.clone().intersect(box2);
-      const size    = new THREE.Vector3();
+      const size = new THREE.Vector3();
       overlap.getSize(size);
       const dy = Math.abs(b1.mesh.position.y - b2.mesh.position.y);
 
@@ -77,7 +101,7 @@ export function detectLinks(allBlocks: PlacedModule[]): LinkResult {
 
         if (Math.abs(localDir1.z) > 1.5 && Math.abs(localDir1.x) < 5.0) {
           // Determine wall presence on each touching side
-          const b1Side    = localDir1.z > 0 ? "right" : "left";
+          const b1Side = localDir1.z > 0 ? "right" : "left";
           const b1HasWall = blueprints[b1.typeKey].walls[b1Side];
 
           const localDir2 = dir
@@ -88,22 +112,32 @@ export function detectLinks(allBlocks: PlacedModule[]): LinkResult {
                 b2.mesh.getWorldQuaternion(new THREE.Quaternion()).invert(),
               ),
             );
-          const b2Side    = localDir2.z > 0 ? "right" : "left";
+          const b2Side = localDir2.z > 0 ? "right" : "left";
           const b2HasWall = blueprints[b2.typeKey].walls[b2Side];
 
           const wallCount = (b1HasWall ? 1 : 0) + (b2HasWall ? 1 : 0);
-          if (wallCount === 0)      standardLinks++;
+          if (wallCount === 0) standardLinks++;
           else if (wallCount === 1) panelLinks++;
-          else                      simpleLinks++;
+          else simpleLinks++;
 
           // All horizontal links are visualised (colour is uniform red in QC)
           const center = new THREE.Vector3();
           overlap.getCenter(center);
-          visualizations.push({ center, size: size.clone(), isVertical: false });
+          visualizations.push({
+            center,
+            size: size.clone(),
+            isVertical: false,
+          });
         }
       }
     }
   }
 
-  return { standardLinks, panelLinks, simpleLinks, verticalLinks, visualizations };
+  return {
+    standardLinks,
+    panelLinks,
+    simpleLinks,
+    verticalLinks,
+    visualizations,
+  };
 }

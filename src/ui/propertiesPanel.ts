@@ -8,18 +8,22 @@ import { saveState } from "../modules/history";
 // ── DOM refs (resolved once at module load, DOM is ready by then) ─────────────
 
 const propsPanel = document.getElementById("properties-panel")!;
-const propName   = document.getElementById("prop-name")!;
-const propDesc   = document.getElementById("prop-desc")!;
-const elecDesc   = document.getElementById("elec-desc")!;
-const roofDesc   = document.getElementById("roof-desc")!;
-const posX       = document.getElementById("pos-x") as HTMLInputElement;
-const posY       = document.getElementById("pos-y") as HTMLInputElement;
-const posZ       = document.getElementById("pos-z") as HTMLInputElement;
-const rotX       = document.getElementById("rot-x") as HTMLInputElement;
-const rotY       = document.getElementById("rot-y") as HTMLInputElement;
-const rotZ       = document.getElementById("rot-z") as HTMLInputElement;
-export const elecSelect = document.getElementById("elec-select") as HTMLSelectElement;
-export const roofSelect = document.getElementById("roof-select") as HTMLSelectElement;
+const propName = document.getElementById("prop-name")!;
+const propDesc = document.getElementById("prop-desc")!;
+const elecDesc = document.getElementById("elec-desc")!;
+const roofDesc = document.getElementById("roof-desc")!;
+const posX = document.getElementById("pos-x") as HTMLInputElement;
+const posY = document.getElementById("pos-y") as HTMLInputElement;
+const posZ = document.getElementById("pos-z") as HTMLInputElement;
+const rotX = document.getElementById("rot-x") as HTMLInputElement;
+const rotY = document.getElementById("rot-y") as HTMLInputElement;
+const rotZ = document.getElementById("rot-z") as HTMLInputElement;
+export const elecSelect = document.getElementById(
+  "elec-select",
+) as HTMLSelectElement;
+export const roofSelect = document.getElementById(
+  "roof-select",
+) as HTMLSelectElement;
 
 // ── UI Update ─────────────────────────────────────────────────────────────────
 
@@ -36,22 +40,28 @@ export function updatePropertiesUI(): void {
     propDesc.innerText = `You are moving ${store.selectedBlocks.size} modules simultaneously.`;
     [posX, posY, posZ, rotX, rotY, rotZ].forEach((i) => (i.disabled = true));
 
-    const firstMesh  = Array.from(store.selectedBlocks)[0];
+    const firstMesh = Array.from(store.selectedBlocks)[0];
     const firstBData = store.placedBlocks.find((b) => b.mesh === firstMesh);
 
     const allSameElec = Array.from(store.selectedBlocks).every(
-      (m) => store.placedBlocks.find((b) => b.mesh === m)?.elecKey === firstBData?.elecKey,
+      (m) =>
+        store.placedBlocks.find((b) => b.mesh === m)?.elecKey ===
+        firstBData?.elecKey,
     );
-    elecSelect.value = allSameElec && firstBData?.elecKey ? firstBData.elecKey : "";
+    elecSelect.value =
+      allSameElec && firstBData?.elecKey ? firstBData.elecKey : "";
     elecDesc.innerText =
       allSameElec && firstBData?.elecKey
         ? electricalKits[firstBData.elecKey].desc
         : "Mixed or No electrical kits assigned.";
 
     const allSameRoof = Array.from(store.selectedBlocks).every(
-      (m) => store.placedBlocks.find((b) => b.mesh === m)?.roofKey === firstBData?.roofKey,
+      (m) =>
+        store.placedBlocks.find((b) => b.mesh === m)?.roofKey ===
+        firstBData?.roofKey,
     );
-    roofSelect.value = allSameRoof && firstBData?.roofKey ? firstBData.roofKey : "";
+    roofSelect.value =
+      allSameRoof && firstBData?.roofKey ? firstBData.roofKey : "";
     roofDesc.innerText =
       allSameRoof && firstBData?.roofKey
         ? roofKits[firstBData.roofKey].desc
@@ -61,26 +71,26 @@ export function updatePropertiesUI(): void {
 
   [posX, posY, posZ, rotX, rotY, rotZ].forEach((i) => (i.disabled = false));
   const singleMesh = Array.from(store.selectedBlocks)[0];
-  const bData      = store.placedBlocks.find((b) => b.mesh === singleMesh);
+  const bData = store.placedBlocks.find((b) => b.mesh === singleMesh);
 
   if (bData) {
-    const bp       = blueprints[bData.typeKey];
+    const bp = blueprints[bData.typeKey];
     propName.innerText = bp.name;
     propDesc.innerText = bp.desc;
 
     if (bData.elecKey && electricalKits[bData.elecKey]) {
-      elecSelect.value   = bData.elecKey;
+      elecSelect.value = bData.elecKey;
       elecDesc.innerText = electricalKits[bData.elecKey].desc;
     } else {
-      elecSelect.value   = "";
+      elecSelect.value = "";
       elecDesc.innerText = "No electrical kit assigned.";
     }
 
     if (bData.roofKey && roofKits[bData.roofKey]) {
-      roofSelect.value   = bData.roofKey;
+      roofSelect.value = bData.roofKey;
       roofDesc.innerText = roofKits[bData.roofKey].desc;
     } else {
-      roofSelect.value   = "";
+      roofSelect.value = "";
       roofDesc.innerText = "No roof assigned.";
     }
   }
@@ -116,9 +126,9 @@ export function applyParametricEdit(): void {
 // ── Event Listener Init ───────────────────────────────────────────────────────
 
 export interface PropertiesPanelCallbacks {
-  onSaveState:  () => void;
+  onSaveState: () => void;
   onCostUpdate: () => void;
-  onQCRefresh:  () => void;
+  onQCRefresh: () => void;
 }
 
 /**

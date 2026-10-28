@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/three": "0.175.0",
+    "@types/three": "0.186.0",
     "@typescript-eslint/eslint-plugin": "7.2.0",
     "@typescript-eslint/parser": "7.2.0",
     "eslint": "8.57.0",
@@ -21,13 +21,12 @@
     "vite": "^7.1.5"
   },
   "dependencies": {
-    "@thatopen/components": "~3.2.0",
-    "@thatopen/components-front": "~3.2.0",
-    "@thatopen/fragments": "~3.2.0",
-    "@thatopen/ui": "~3.2.0",
-    "@thatopen/ui-obc": "~3.2.0",
-    "three": "0.175.0",
-    "web-ifc": "0.0.72",
-    "xlsx": "^0.18.5"
+    "@thatopen/components": "~3.6.0",
+    "@thatopen/components-front": "~3.6.0",
+    "@thatopen/fragments": "~3.6.0",
+    "three": "0.186.1",
+    "web-ifc": "0.0.78",
+    "xlsx": "^0.18.5",
+    "camera-controls": "^3.1.2"
   }
 }

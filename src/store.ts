@@ -9,30 +9,30 @@ import type { PlacedModule, SceneSnapshot, QCMode, ToolState } from "./types";
  */
 export const store = {
   // ── Scene Blocks ──────────────────────────────────────────────────────────
-  placedBlocks:    [] as PlacedModule[],
-  selectedBlocks:  new Set<THREE.Mesh>(),
+  placedBlocks: [] as PlacedModule[],
+  selectedBlocks: new Set<THREE.Mesh>(),
 
   // ── Undo History ──────────────────────────────────────────────────────────
-  history:         [] as SceneSnapshot[],
+  history: [] as SceneSnapshot[],
 
   // ── App Mode ──────────────────────────────────────────────────────────────
-  activeQC:        "none" as QCMode,
-  activeTool:      "translate" as ToolState,
+  activeQC: "none" as QCMode,
+  activeTool: "translate" as ToolState,
   isPlacementMode: false,
-  isPlanView:      false,
+  isPlanView: false,
 
   // ── Input State ───────────────────────────────────────────────────────────
-  isAltDown:       false,
-  globalSnap:      0.5,
+  isAltDown: false,
+  globalSnap: 0.5,
 
   // ── Drag / Pointer Tracking ───────────────────────────────────────────────
-  dragStartX:      0,
-  dragStartY:      0,
-  dragStartTime:   0,
-  clickedAxis:     null as string | null,
+  dragStartX: 0,
+  dragStartY: 0,
+  dragStartTime: 0,
+  clickedAxis: null as string | null,
 
   // ── OSNAP Vertex Drag ─────────────────────────────────────────────────────
   isVertexDragging: false,
-  snapStartVertex:  null as THREE.Vector3 | null,
-  dragOffsets:      new Map<THREE.Mesh, THREE.Vector3>(),
+  snapStartVertex: null as THREE.Vector3 | null,
+  dragOffsets: new Map<THREE.Mesh, THREE.Vector3>(),
 };
