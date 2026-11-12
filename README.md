@@ -70,7 +70,8 @@ The app will be available at `http://localhost:5173` (or the next available port
 | Command | Description |
 |---|---|
 | `npm run dev` | Start local dev server with HMR |
-| `npm run build` | Type-check and build production bundle |
+| `npm run build` | Type-check, build the app and bundle the MCP server |
+| `npm run build:api` | Bundle only the MCP server (`server/` → `server/dist/handlers.mjs`) |
 | `npm run preview` | Preview the production build locally |
 
 ---
@@ -87,6 +88,9 @@ ThatModularApp/
 │   ├── qc/                  # QC colour modes and corridor wall detection
 │   ├── bom/                 # BOM/cost calculation, link detection, save/load/export
 │   ├── ui/                  # Properties panel
+│   ├── core/                # Pure layout engine (BOM, links, walls, checks, Archicad export) — shared with the server
+│   ├── cloud/               # Supabase client, cloud projects panel, live sync
+│   ├── consent.ts           # OAuth consent page script (connecting Claude)
 │   ├── data/                # Module blueprints, electrical and roof kits
 │   ├── store.ts / types.ts  # Shared app state and types
 │   ├── style.css            # Global styles
@@ -100,6 +104,9 @@ ThatModularApp/
 │   ├── roof_excel/
 │   └── adosamientos_excel/
 │
+├── server/mcp/              # MCP server: JSON-RPC handler, tools, OAuth metadata
+├── api/                     # Vercel functions: /api/mcp and OAuth discovery
+├── oauth/consent.html       # OAuth consent page
 ├── generate_bom.mjs         # Script: compile Excel datasets → bom.json
 ├── TestFiles/               # Reference IFC / sample files for development
 ├── index.html               # App shell
@@ -107,6 +114,38 @@ ThatModularApp/
 ├── tsconfig.json
 └── .eslintrc.cjs
 ```
+
+---
+
+## Cloud projects and Claude (MCP)
+
+Projects can be saved to the cloud (Supabase project `modulnor-configurator`) from the **Cloud project**
+panel at the top of the sidebar. Cloud projects are shared by the team, keep a change log, and update
+live in the app when someone else — or Claude — changes them. Saving and loading JSON files works as before.
+
+**Connect Claude:** Settings → Connectors → *Add custom connector* →
+`https://modulnor-school-configurator.vercel.app/api/mcp`, then sign in with your Enzyme account and allow access.
+
+Claude can then:
+
+| Read | Change (asks you first; every change is logged and undoable) |
+|---|---|
+| `get_overview` — catalogue, kits, coordinate conventions | `create_project` (empty or copy) · `rename_project` |
+| `list_projects` · `get_project` (modules with x/z/level/rotation) | `add_modules` · `update_modules` (move, swap type, kits) |
+| `get_bom` — same numbers as the app's BOM panel | `transform_modules` — move/rotate/copy a group |
+| `check_layout` — overlaps, floating modules, missing kits | `remove_modules` · `archive_project` |
+| `export_archicad_placement` — Tapir hotlink placement data | `undo_change` |
+| `list_recent_changes` | |
+
+How it works:
+
+- `server/mcp/` is a small stateless MCP server (Streamable HTTP, JSON replies). Sign-in is OAuth 2.1 with
+  Supabase Auth as the authorization server; the consent screen is `oauth/consent.html`.
+- Every tool runs as the signed-in user, so row-level security applies. Layout changes go through the
+  `save_project` database function (optimistic concurrency on `version`), which writes `project_changes`;
+  `undo_project_change` reverts the latest change.
+- BOM, links, walls and checks come from `src/core/`, the same code the browser uses.
+- Accounts are created by an admin (Supabase → Authentication → Users → Add user); public sign-up is off.
 
 ---
 

@@ -48,6 +48,8 @@ module.exports = {
     "no-plusplus": "off",
     // alert/confirm/prompt are the app's intentional lightweight dialogs
     "no-alert": "off",
+    // `void promise()` marks deliberately un-awaited promises (event handlers)
+    "no-void": ["error", { allowAsStatement: true }],
     // function declarations are hoisted; only flag variables/classes used early
     "no-use-before-define": ["error", { functions: false, classes: true, variables: true }],
   },

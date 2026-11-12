@@ -12,6 +12,7 @@ import {
   duplicateModules,
   removeModules,
   findModule,
+  clearModules,
 } from "./modules/placement";
 import { osnap, applySnapMarkerColor, performOsnap } from "./tools/osnapTool";
 import {
@@ -21,6 +22,8 @@ import {
 } from "./tools/selectionManager";
 import { initQCManager, refreshQCColors } from "./qc/qcManager";
 import { updateCostUI } from "./bom/bomCalculator";
+import { toSavedModules, type SavedModule } from "./core/layout";
+import { initCloud, markCloudDirty } from "./cloud/cloudPanel";
 import {
   saveProject,
   loadProject,
@@ -81,6 +84,7 @@ function afterLayoutChange(): void {
   updateCostUI();
   refreshQCColors();
   viewer.fitShadows(allMeshes());
+  markCloudDirty();
   invalidate();
 }
 
@@ -724,3 +728,32 @@ document.getElementById("export-ifc-btn")!.addEventListener("click", () => {
 
 // Initial state
 afterLayoutChange();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLOUD PROJECTS (shared with the team and with Claude via MCP)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Replace the scene with a layout; the previous scene stays on the undo stack. */
+function applyLayout(modules: SavedModule[], opts: { fit: boolean }): void {
+  updateSelection(null, false);
+  if (store.placedBlocks.length > 0) saveState();
+  clearModules();
+  modules.forEach((m) =>
+    createModule({
+      id: m.id,
+      typeKey: m.typeKey,
+      elecKey: m.elecKey,
+      roofKey: m.roofKey,
+      position: new THREE.Vector3(m.pos.x, m.pos.y, m.pos.z),
+      rotation: new THREE.Euler(m.rot.x, m.rot.y, m.rot.z),
+    }),
+  );
+  updatePropertiesUI();
+  afterLayoutChange();
+  if (opts.fit) viewer.zoomExtents(allMeshes());
+}
+
+void initCloud({
+  getLayout: () => toSavedModules(store.placedBlocks), // world transforms, so grouped selections are fine
+  applyLayout,
+});

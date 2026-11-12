@@ -6,6 +6,7 @@ import { electricalKits } from "../data/electricalKits";
 import { roofKits } from "../data/roofKits";
 import { getCategory } from "../data/categoryMap";
 import { clearModules, createModule } from "../modules/placement";
+import { parseLayout, toSavedModules, type SavedModule } from "../core/layout";
 import { saveState } from "../modules/history";
 import type { BoqData } from "./bomCalculator";
 
@@ -56,15 +57,7 @@ export interface LoadCallbacks {
   onRestored: () => void;
 }
 
-/** One module as stored in a project file (also the Archicad placement input). */
-export interface SavedModule {
-  id: string;
-  typeKey: string;
-  elecKey?: string;
-  roofKey?: string;
-  pos: { x: number; y: number; z: number };
-  rot: { x: number; y: number; z: number };
-}
+export type { SavedModule };
 
 /** Serialises the current layout to a JSON file (world-space transforms). */
 export async function saveProject(): Promise<void> {
@@ -73,20 +66,7 @@ export async function saveProject(): Promise<void> {
     return;
   }
 
-  const data: SavedModule[] = store.placedBlocks.map((b) => {
-    const p = b.mesh.getWorldPosition(new THREE.Vector3());
-    const r = new THREE.Euler().setFromQuaternion(
-      b.mesh.getWorldQuaternion(new THREE.Quaternion()),
-    );
-    return {
-      id: b.id,
-      typeKey: b.typeKey,
-      elecKey: b.elecKey,
-      roofKey: b.roofKey,
-      pos: { x: p.x, y: p.y, z: p.z },
-      rot: { x: r.x, y: r.y, z: r.z },
-    };
-  });
+  const data: SavedModule[] = toSavedModules(store.placedBlocks);
 
   await saveFile(
     JSON.stringify(data, null, 2),
@@ -96,55 +76,8 @@ export async function saveProject(): Promise<void> {
   );
 }
 
-const isNum = (v: unknown): v is number =>
-  typeof v === "number" && Number.isFinite(v);
-const isVec = (v: any): boolean => v && isNum(v.x) && isNum(v.y) && isNum(v.z);
-
-/**
- * Validates parsed project JSON. Returns the usable modules plus a list of
- * problems; nothing in the scene is touched until validation has passed.
- */
-export function parseProject(data: unknown): {
-  modules: SavedModule[];
-  problems: string[];
-} {
-  if (!Array.isArray(data))
-    return {
-      modules: [],
-      problems: ["File is not a project layout (expected a list of modules)."],
-    };
-
-  const modules: SavedModule[] = [];
-  const problems: string[] = [];
-  data.forEach((m: any, i) => {
-    if (!m || !blueprints[m.typeKey]) {
-      problems.push(`Module ${i + 1}: unknown type "${m?.typeKey}"`);
-      return;
-    }
-    if (!isVec(m.pos) || !isVec(m.rot)) {
-      problems.push(`Module ${i + 1}: missing or invalid position/rotation`);
-      return;
-    }
-    const elecKey =
-      m.elecKey && electricalKits[m.elecKey] ? m.elecKey : undefined;
-    const roofKey = m.roofKey && roofKits[m.roofKey] ? m.roofKey : undefined;
-    if (m.elecKey && !elecKey)
-      problems.push(
-        `Module ${i + 1}: unknown electrical kit "${m.elecKey}" dropped`,
-      );
-    if (m.roofKey && !roofKey)
-      problems.push(`Module ${i + 1}: unknown roof kit "${m.roofKey}" dropped`);
-    modules.push({
-      id: typeof m.id === "string" ? m.id : crypto.randomUUID(),
-      typeKey: m.typeKey,
-      elecKey,
-      roofKey,
-      pos: { x: m.pos.x, y: m.pos.y, z: m.pos.z },
-      rot: { x: m.rot.x, y: m.rot.y, z: m.rot.z },
-    });
-  });
-  return { modules, problems };
-}
+/** Validates parsed project JSON (see core/layout). */
+export const parseProject = parseLayout;
 
 /** Reads a saved JSON layout file and rebuilds the scene (undoable). */
 export function loadProject(file: File, cb: LoadCallbacks): void {

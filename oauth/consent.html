@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Connect Claude · Modulnor</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: sans-serif; background: #1a1a1a; color: #eee;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px;
+    }
+    main { width: 100%; max-width: 440px; background: #242424; border: 1px solid #333; border-radius: 8px; padding: 24px; }
+    .eyebrow { color: #74a382; font-size: 0.75em; font-weight: bold; letter-spacing: 0.06em; text-transform: uppercase; }
+    h1 { font-size: 1.4em; margin: 6px 0 14px; }
+    p, li { font-size: 0.9em; line-height: 1.5; color: #ccc; }
+    ul { margin: 0 0 18px 18px; display: grid; gap: 6px; }
+    .msg { color: #f1c40f; min-height: 1.2em; margin: 8px 0; font-size: 0.85em; }
+    .muted { color: #888; font-size: 0.8em; margin-top: 16px; }
+    form { display: grid; gap: 10px; margin-top: 8px; }
+    label { display: grid; gap: 4px; font-size: 0.85em; color: #bbb; }
+    input { background: #333; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 8px; font-size: 1em; }
+    input:focus { outline: 2px solid #74a382; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+    button { background: #52795f; color: #fff; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.95em; }
+    button:hover { background: #466b53; }
+    button.secondary { background: #3c5444; }
+    button.secondary:hover { background: #2f4235; }
+    button:disabled { opacity: 0.6; cursor: default; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Modulnor School Configurator · AI access</p>
+    <h1 id="title">Connect an assistant</h1>
+    <div id="body"><p>Loading…</p></div>
+  </main>
+  <script type="module" src="/src/consent.ts"></script>
+</body>
+</html>
