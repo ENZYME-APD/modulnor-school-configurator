@@ -1,103 +1,27 @@
-import bomData from "../bom.json";
 import { store } from "../store";
 import { blueprints } from "../data/blueprints";
 import { roofKits } from "../data/roofKits";
-import { getCategory } from "../data/categoryMap";
-import { detectLinks, computeModuleBoxes } from "./linkDetector";
-import { getDynamicWalls } from "../qc/qcManager";
-
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-type ShoppingCart = Record<string, { name: string; qty: number }>;
+import { computeBoq, groupBom, type Boq } from "../core/boq";
 
 /** Shape of the data exposed for CSV export (stored on window for the exporter). */
-export interface BoqData {
-  classrooms: number;
-  corridors: number;
-  bom: ShoppingCart;
-  elec: Record<string, number>;
-  roofs: Record<string, number>;
-  standardLinks: number;
-  panelLinks: number;
-  simpleLinks: number;
-  verticalLinks: number;
-  totalFee: number;
-}
-
-// ── BOM Cart Helper ───────────────────────────────────────────────────────────
-
-function addBomToCart(cart: ShoppingCart, key: string, multiplier = 1): void {
-  const partBom = (bomData as Record<string, unknown>)[key];
-  if (!partBom) return;
-  for (const [id, details] of Object.entries(
-    partBom as Record<string, unknown>,
-  )) {
-    const d = details as { name?: string; qty?: number };
-    if (!d?.name?.trim() || d.qty == null) continue;
-    if (!cart[id]) cart[id] = { name: d.name.trim(), qty: 0 };
-    cart[id].qty += d.qty * multiplier;
-  }
-}
+export type BoqData = Boq;
 
 // ── Main Update Function ──────────────────────────────────────────────────────
 
-/** Recalculates all counts, rebuilds BOM HTML, and updates every DOM element. */
+/** Recalculates all counts and updates every BOM / cost panel in the DOM. */
 export function updateCostUI(): void {
-  let classroomCount = 0;
-  let corridorCount = 0;
-  let totalCost = 0;
-  let dynamicWallMeters = 0;
-  const elecCounts: Record<string, number> = {};
-  const roofCounts: Record<string, number> = {};
-  const feeCounts: Record<string, number> = {};
-  const shoppingCart: ShoppingCart = {};
-  const boxes = computeModuleBoxes(store.placedBlocks);
-
-  store.placedBlocks.forEach((b) => {
-    const bp = blueprints[b.typeKey];
-
-    if (bp.group === "classroom") {
-      classroomCount++;
-      addBomToCart(shoppingCart, "ESTRUCTURA");
-    }
-
-    if (bp.group === "corridor") {
-      corridorCount++;
-      if (b.typeKey === "CorridorStructure") {
-        const dw = getDynamicWalls(b, store.placedBlocks, boxes);
-        if (dw.posX) dynamicWallMeters += 2.44;
-        if (dw.negX) dynamicWallMeters += 2.44;
-        if (dw.posZ) dynamicWallMeters += 6.0;
-        if (dw.negZ) dynamicWallMeters += 6.0;
-      }
-    }
-
-    feeCounts[b.typeKey] = (feeCounts[b.typeKey] ?? 0) + 1;
-    totalCost += bp.cost;
-    if (b.elecKey) elecCounts[b.elecKey] = (elecCounts[b.elecKey] ?? 0) + 1;
-    if (b.roofKey) roofCounts[b.roofKey] = (roofCounts[b.roofKey] ?? 0) + 1;
-
-    addBomToCart(shoppingCart, b.typeKey);
-    if (b.elecKey) addBomToCart(shoppingCart, b.elecKey);
-    if (b.roofKey) addBomToCart(shoppingCart, b.roofKey);
-  });
-
-  if (dynamicWallMeters > 0) {
-    shoppingCart["REV-DYN-WALL"] = {
-      name: "Corridor Dynamic Walls (Linear m)",
-      qty: parseFloat(dynamicWallMeters.toFixed(2)),
-    };
-  }
-
-  // Shared link detector — previously duplicated here and in refreshQCColors
-  const { standardLinks, panelLinks, simpleLinks, verticalLinks } = detectLinks(
-    store.placedBlocks,
-    boxes,
-  );
-
-  if (standardLinks > 0)
-    addBomToCart(shoppingCart, "LARGO_STANDARD", standardLinks);
-  if (panelLinks > 0) addBomToCart(shoppingCart, "LARGO", panelLinks);
+  const boq = computeBoq(store.placedBlocks);
+  const {
+    classrooms: classroomCount,
+    corridors: corridorCount,
+    standardLinks,
+    panelLinks,
+    simpleLinks,
+    verticalLinks,
+    roofs: roofCounts,
+    modules: feeCounts,
+    totalFee: totalCost,
+  } = boq;
 
   // ── DOM updates ────────────────────────────────────────────────────────────
 
@@ -113,15 +37,7 @@ export function updateCostUI(): void {
     verticalLinks.toString();
 
   // BOM grouped by category
-  const groupedCart: Record<
-    string,
-    { id: string; name: string; qty: number }[]
-  > = {};
-  for (const [id, item] of Object.entries(shoppingCart)) {
-    const cat = getCategory(id);
-    if (!groupedCart[cat]) groupedCart[cat] = [];
-    groupedCart[cat].push({ id, name: item.name, qty: item.qty });
-  }
+  const groupedCart = groupBom(boq.bom);
 
   let bomHTML = "";
   for (const [cat, items] of Object.entries(groupedCart)) {
@@ -155,16 +71,5 @@ export function updateCostUI(): void {
   document.getElementById("total-cost")!.innerText = `€${totalCost}`;
 
   // Expose typed snapshot for CSV export
-  (window as any).__boqData = {
-    classrooms: classroomCount,
-    corridors: corridorCount,
-    bom: shoppingCart,
-    elec: elecCounts,
-    roofs: roofCounts,
-    standardLinks,
-    panelLinks,
-    simpleLinks,
-    verticalLinks,
-    totalFee: totalCost,
-  } satisfies BoqData;
+  (window as unknown as { __boqData: BoqData }).__boqData = boq;
 }
