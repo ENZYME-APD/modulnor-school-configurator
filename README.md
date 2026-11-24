@@ -122,7 +122,12 @@ ThatModularApp/
 - **Box selection (CAD style):** in Select mode, left-drag on empty space. Left → right is a
   *window* (solid blue — only modules fully inside); right → left is a *crossing* (dashed green —
   anything it touches). Hold Shift to add to the selection; Escape cancels.
+- **File menu (top bar):** **New** · **Open ▾** (*Cloud project…* or *File from computer…*) ·
+  **Save** (back to wherever the project lives — the cloud project or the file; asks the first time) ·
+  **Save as ▾** (*New cloud project…* or *Download file (.json)*). The sidebar's **Project** box shows
+  the current project, where it lives, unsaved changes, live updates and sign-in.
 - **New:** clears the scene to an empty project (Ctrl+Z brings it back; a cloud project stays as it was).
+- **Export ▾:** 3D model (.glb), bill of quantities (.csv), BIM (IFC, coming with detailed mode).
 - **Sync to Archicad:** saves `modulnor_archicad_sync.json` — Archicad coordinates, storey,
   rotation and kits per module — for the Tapir hotlink placement script.
 
@@ -130,8 +135,8 @@ ThatModularApp/
 
 ## Cloud projects and Claude (MCP)
 
-Projects can be saved to the cloud (Supabase project `modulnor-configurator`) from the **Cloud project**
-panel at the top of the sidebar. Cloud projects are shared by the team, keep a change log, and update
+Projects can be saved to the cloud (Supabase project `modulnor-configurator`) with **Save as → New cloud
+project…** and opened with **Open → Cloud project…**. Cloud projects are shared by the team, keep a change log, and update
 live in the app when someone else — or Claude — changes them. Saving and loading JSON files works as before.
 
 **Connect Claude:** Settings → Connectors → *Add custom connector* →

@@ -47,13 +47,30 @@
     .tb-group { display: flex; align-items: center; gap: 2px; padding: 2px; background: #1c1c1c; border: 1px solid #2e2e2e; border-radius: 7px; }
     .tb-label { font-size: 10px; font-weight: bold; color: #74a382; letter-spacing: 0.06em; padding: 0 6px 0 5px; }
     .tb-btn {
-      height: 28px; padding: 0 10px; font-size: 12px; font-weight: 600; line-height: 28px;
+      height: 28px; padding: 0 9px; font-size: 12px; font-weight: 600; line-height: 28px;
       background: transparent; color: #d6d6d6; border-radius: 5px; white-space: nowrap;
     }
     .tb-btn:hover { background: #2f4235; color: #fff; }
     .tb-btn.is-active { background: #f39c12; color: #1a1a1a; }
     .tb-btn.tb-accent { background: #3c5444; color: #fff; }
     .tb-btn.tb-accent:hover { background: #4a6a55; }
+
+    @media (max-width: 1450px) { .tb-title, .tb-title + .tb-sep { display: none; } }
+    @media (max-width: 1250px) { .tb-check { display: none; } }
+
+    .tb-drop::after { content: "▾"; margin-left: 5px; font-size: 10px; opacity: 0.7; }
+    .tb-btn[aria-expanded="true"] { background: #2f4235; color: #fff; }
+    .tb-menu {
+      position: fixed; z-index: 1001; min-width: 220px; padding: 4px;
+      background: #232323; border: 1px solid #3a3a3a; border-radius: 7px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .tb-menu button {
+      display: flex; flex-direction: column; align-items: flex-start; gap: 1px; text-align: left;
+      background: transparent; color: #e6e6e6; font-size: 12.5px; font-weight: 600; padding: 7px 10px; border-radius: 5px;
+    }
+    .tb-menu button small { color: #8f8f8f; font-weight: normal; font-size: 11px; }
+    .tb-menu button:hover, .tb-menu button:focus-visible { background: #2f4235; outline: none; }
 
     .marquee-box {
       position: fixed; z-index: 30; pointer-events: none;
@@ -278,13 +295,13 @@
     <div class="tb-right">
       <div class="tb-group" role="group" aria-label="File">
         <button id="new-btn" class="tb-btn" title="Start a new, empty project (Ctrl+Z to undo)">New</button>
-        <button id="load-btn" class="tb-btn" title="Open a project file (.json)">Open</button>
-        <button id="save-btn" class="tb-btn" title="Save the project as a file (.json)">Save</button>
+        <button id="open-btn" class="tb-btn tb-drop" title="Open a cloud project or a file from this computer">Open</button>
+        <button id="save-btn" class="tb-btn" title="Save back to where this project lives (cloud or file)">Save</button>
+        <button id="saveas-btn" class="tb-btn tb-drop" title="Save as a new cloud project or download a file">Save as</button>
         <input type="file" id="load-file-input" accept=".json" style="display: none;">
       </div>
       <div class="tb-group" role="group" aria-label="Export">
-        <button id="export-gltf-btn" class="tb-btn" title="Export the 3D model (.glb)">Export 3D</button>
-        <button id="export-ifc-btn" class="tb-btn" title="Export BIM (IFC) — coming with detailed mode">Export BIM</button>
+        <button id="export-btn" class="tb-btn tb-drop" title="Export the 3D model, BIM or bill of quantities">Export</button>
         <button id="archicad-sync-btn" class="tb-btn tb-accent" title="Export the placement file for the Archicad hotlink sync script">Sync to Archicad</button>
       </div>
       <div class="tb-group" role="group" aria-label="Quality checks">

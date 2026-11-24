@@ -18,7 +18,7 @@ async function saveFile(
   suggestedName: string,
   mimeType: string,
   extension: string,
-): Promise<void> {
+): Promise<string | null> {
   const blob =
     content instanceof Blob ? content : new Blob([content], { type: mimeType });
 
@@ -36,19 +36,21 @@ async function saveFile(
       const writable = await handle.createWritable();
       await writable.write(blob);
       await writable.close();
-    } else {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = suggestedName;
-      a.click();
-      URL.revokeObjectURL(url);
+      return handle.name as string;
     }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = suggestedName;
+    a.click();
+    URL.revokeObjectURL(url);
+    return suggestedName;
   } catch (err: any) {
     if (err.name !== "AbortError") {
       console.error("Export failed:", err);
       alert("An error occurred while saving the file.");
     }
+    return null;
   }
 }
 
@@ -61,17 +63,23 @@ export interface LoadCallbacks {
 export type { SavedModule };
 
 /** Serialises the current layout to a JSON file (world-space transforms). */
-export async function saveProject(): Promise<void> {
+/** Saves the layout as a .json file. Resolves to the file name, or null if cancelled. */
+export async function saveProject(
+  suggestedName?: string,
+): Promise<string | null> {
   if (store.placedBlocks.length === 0) {
     alert("Nothing to save!");
-    return;
+    return null;
   }
 
   const data: SavedModule[] = toSavedModules(store.placedBlocks);
+  const name = suggestedName
+    ? `${suggestedName.replace(/\.json$/i, "").replace(/[\\/:*?"<>|]/g, "-")}.json`
+    : "modular_school.json";
 
-  await saveFile(
+  return saveFile(
     JSON.stringify(data, null, 2),
-    "modular_school.json",
+    name,
     "application/json",
     "json",
   );
@@ -82,6 +90,7 @@ export const parseProject = parseLayout;
 
 /** Reads a saved JSON layout file and rebuilds the scene (undoable). */
 export function loadProject(file: File, cb: LoadCallbacks): void {
+  // cb.onRestored runs only when the file loaded (the scene was replaced)
   const reader = new FileReader();
   reader.onload = (e) => {
     let parsed: unknown;
