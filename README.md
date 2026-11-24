@@ -117,6 +117,17 @@ ThatModularApp/
 
 ---
 
+## Selecting and syncing
+
+- **Box selection (CAD style):** in Select mode, left-drag on empty space. Left → right is a
+  *window* (solid blue — only modules fully inside); right → left is a *crossing* (dashed green —
+  anything it touches). Hold Shift to add to the selection; Escape cancels.
+- **New:** clears the scene to an empty project (Ctrl+Z brings it back; a cloud project stays as it was).
+- **Sync to Archicad:** saves `modulnor_archicad_sync.json` — Archicad coordinates, storey,
+  rotation and kits per module — for the Tapir hotlink placement script.
+
+---
+
 ## Cloud projects and Claude (MCP)
 
 Projects can be saved to the cloud (Supabase project `modulnor-configurator`) from the **Cloud project**

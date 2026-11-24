@@ -7,6 +7,7 @@ import { roofKits } from "../data/roofKits";
 import { getCategory } from "../data/categoryMap";
 import { clearModules, createModule } from "../modules/placement";
 import { parseLayout, toSavedModules, type SavedModule } from "../core/layout";
+import { ARCHICAD_NOTES, toArchicadPlacements } from "../core/archicad";
 import { saveState } from "../modules/history";
 import type { BoqData } from "./bomCalculator";
 
@@ -204,5 +205,38 @@ export function exportGLTF(): void {
       ),
     (err) => console.error(err),
     { binary: false },
+  );
+}
+
+// ── Archicad sync ────────────────────────────────────────────────────────────
+
+/**
+ * Saves the placement file read by the Archicad hotlink sync script (Tapir):
+ * one entry per module with Archicad coordinates, storey, rotation and kits.
+ * Module ids let the script update hotlinks it placed before instead of duplicating them.
+ */
+export async function exportArchicadPlacement(): Promise<void> {
+  if (store.placedBlocks.length === 0) {
+    alert("Nothing to sync yet — place some modules first.");
+    return;
+  }
+  const placements = toArchicadPlacements(toSavedModules(store.placedBlocks));
+  const data = {
+    format: "modulnor-archicad-placement",
+    version: 1,
+    exported_at: new Date().toISOString(),
+    units: "m",
+    notes: ARCHICAD_NOTES,
+    hotlinks: [...new Set(placements.map((p) => p.hotlink))].sort(),
+    storeys: [...new Set(placements.map((p) => p.storey))].sort(
+      (a, b) => a - b,
+    ),
+    placements,
+  };
+  await saveFile(
+    JSON.stringify(data, null, 2),
+    "modulnor_archicad_sync.json",
+    "application/json",
+    "json",
   );
 }

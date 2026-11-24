@@ -19,16 +19,23 @@ import {
   initSelectionManager,
   updateSelection,
   refreshSelection,
+  setSelection,
 } from "./tools/selectionManager";
 import { initQCManager, refreshQCColors } from "./qc/qcManager";
 import { updateCostUI } from "./bom/bomCalculator";
 import { toSavedModules, type SavedModule } from "./core/layout";
-import { initCloud, markCloudDirty } from "./cloud/cloudPanel";
+import {
+  initCloud,
+  markCloudDirty,
+  detachCloudProject,
+} from "./cloud/cloudPanel";
+import { initMarquee, beginMarquee } from "./tools/marquee";
 import {
   saveProject,
   loadProject,
   exportCSV,
   exportGLTF,
+  exportArchicadPlacement,
 } from "./bom/exporters";
 import {
   updatePropertiesUI,
@@ -64,6 +71,15 @@ snapMarker.visible = false;
 overlay.add(snapMarker);
 
 initPlacement(scene);
+initMarquee({
+  canvas,
+  getCamera: () => viewer.camera,
+  getBlocks: () => store.placedBlocks,
+  onSelect: (meshes, add) => setSelection(meshes, add),
+  onEmptyClick: (add) => {
+    if (!add) updateSelection(null, false);
+  },
+});
 initQCManager(overlay);
 initSelectionManager({
   scene,
@@ -468,10 +484,12 @@ canvas.addEventListener("pointerdown", (event) => {
   // ── Selection ─────────────────────────────────────────────────────────────
   if (!store.isPlacementMode) {
     const hits = raycaster.intersectObjects(allMeshes(), false);
-    updateSelection(
-      hits.length > 0 ? (hits[0].object as THREE.Mesh) : null,
-      event.shiftKey || event.metaKey,
-    );
+    if (hits.length > 0)
+      updateSelection(
+        hits[0].object as THREE.Mesh,
+        event.shiftKey || event.metaKey,
+      );
+    else beginMarquee(event); // click = deselect, drag = CAD box selection
     return;
   }
 
@@ -655,10 +673,7 @@ modeBuildBtn.addEventListener("click", () => {
 const viewModeBtn = document.getElementById("view-mode-btn")!;
 viewModeBtn.addEventListener("click", () => {
   viewer.setPlanView(!store.isPlanView);
-  viewModeBtn.textContent = store.isPlanView
-    ? "3D Perspective"
-    : "2D Plan View";
-  viewModeBtn.style.background = store.isPlanView ? "#f39c12" : "#52795f";
+  viewModeBtn.textContent = store.isPlanView ? "3D view" : "Plan view";
 });
 
 document
@@ -714,6 +729,27 @@ loadInput.addEventListener("change", () => {
     },
   });
   loadInput.value = "";
+});
+
+document.getElementById("new-btn")!.addEventListener("click", () => {
+  if (
+    store.placedBlocks.length > 0 &&
+    !window.confirm(
+      "Start a new, empty project? (Ctrl+Z brings the current layout back.)",
+    )
+  )
+    return;
+  updateSelection(null, false);
+  if (store.placedBlocks.length > 0) saveState();
+  detachCloudProject(); // the cloud project stays as it was
+  clearModules();
+  updatePropertiesUI();
+  afterLayoutChange();
+  viewer.zoomExtents([]);
+});
+
+document.getElementById("archicad-sync-btn")!.addEventListener("click", () => {
+  void exportArchicadPlacement();
 });
 
 document.getElementById("export-csv-btn")!.addEventListener("click", exportCSV);
