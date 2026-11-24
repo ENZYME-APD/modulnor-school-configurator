@@ -54,7 +54,22 @@ export function updateSelection(mesh: THREE.Mesh | null, multi: boolean): void {
       store.selectedBlocks.delete(mesh);
     else store.selectedBlocks.add(mesh);
   }
+  applySelection();
+}
 
+/**
+ * Selects many meshes at once (box selection). `add` keeps the current
+ * selection; otherwise it is replaced.
+ */
+export function setSelection(meshes: THREE.Mesh[], add: boolean): void {
+  store.selectedBlocks.forEach((b) => _scene.attach(b));
+  if (!add) store.selectedBlocks.clear();
+  meshes.forEach((m) => store.selectedBlocks.add(m));
+  applySelection();
+}
+
+/** Redraws highlights/outlines and re-attaches the gizmo for the current set. */
+function applySelection(): void {
   // Remove old outlines (edges geometry is shared per type — never dispose)
   selectionOutlines.forEach((line, m) => m.remove(line));
   selectionOutlines.clear();

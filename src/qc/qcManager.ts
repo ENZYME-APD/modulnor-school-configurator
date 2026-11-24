@@ -57,7 +57,7 @@ export function refreshQCColors(): void {
   // Update button highlight states
   (["elec", "roof", "orient", "links"] as const).forEach((mode) => {
     const el = document.getElementById(`qc-${mode}-btn`);
-    if (el) el.style.background = store.activeQC === mode ? "#f39c12" : "";
+    el?.classList.toggle("is-active", store.activeQC === mode);
   });
 
   // Clear previous link visualizations

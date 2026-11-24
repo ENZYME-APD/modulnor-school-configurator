@@ -23,20 +23,49 @@
     }
 
     #top-bar {
-      height: 60px;
+      height: 48px;
       background: #111;
       border-bottom: 1px solid #333;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      gap: 16px;
+      padding: 0 14px;
       z-index: 20;
+      white-space: nowrap;
     }
+
+    .tb-left, .tb-right { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .tb-right { overflow-x: auto; scrollbar-width: thin; }
+    .tb-title { color: #74a382; font-size: 15px; font-weight: bold; }
+    .tb-sep { width: 1px; height: 22px; background: #3a3a3a; }
+    .tb-field, .tb-check { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #aaa; cursor: pointer; }
+    .tb-field input {
+      width: 52px; background: #2b2b2b; color: #fff; border: 1px solid #4a4a4a; border-radius: 4px;
+      padding: 4px 6px; font-size: 12px; text-align: right; font-weight: bold;
+    }
+    .tb-group { display: flex; align-items: center; gap: 2px; padding: 2px; background: #1c1c1c; border: 1px solid #2e2e2e; border-radius: 7px; }
+    .tb-label { font-size: 10px; font-weight: bold; color: #74a382; letter-spacing: 0.06em; padding: 0 6px 0 5px; }
+    .tb-btn {
+      height: 28px; padding: 0 10px; font-size: 12px; font-weight: 600; line-height: 28px;
+      background: transparent; color: #d6d6d6; border-radius: 5px; white-space: nowrap;
+    }
+    .tb-btn:hover { background: #2f4235; color: #fff; }
+    .tb-btn.is-active { background: #f39c12; color: #1a1a1a; }
+    .tb-btn.tb-accent { background: #3c5444; color: #fff; }
+    .tb-btn.tb-accent:hover { background: #4a6a55; }
+
+    .marquee-box {
+      position: fixed; z-index: 30; pointer-events: none;
+      border: 1px solid #3498db; background: rgba(52, 152, 219, 0.12);
+    }
+    .marquee-box.crossing { border: 1px dashed #2ecc71; background: rgba(46, 204, 113, 0.12); }
+    .marquee-box[hidden] { display: none; }
 
     #main-layout {
       display: flex;
       flex-grow: 1;
-      height: calc(100vh - 60px);
+      height: calc(100vh - 48px);
     }
 
     #sidebar {
@@ -236,41 +265,39 @@
 <body>
 
   <div id="top-bar">
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <h2 style="color: #74a382; margin-right: 10px;">Modular School Builder</h2>
-      <div style="display: flex; align-items: center; gap: 8px; border-left: 1px solid #444; padding-left: 15px;">
-        <label style="font-size: 0.85em; color: #aaa;">Grid Snap (m):</label>
-        <input type="number" id="global-snap-input" value="0.5" step="0.1"
-          style="width: 60px; background: #333; color: white; border: 1px solid #555; padding: 6px; border-radius: 4px; text-align: right; font-weight: bold;">
-      </div>
-      <div style="display: flex; align-items: center; gap: 8px; border-left: 1px solid #444; padding-left: 15px;">
-        <label style="font-size: 0.85em; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 5px;">
-          <input type="checkbox" id="trackpad-toggle"> Trackpad Nav
-        </label>
-        <label title="Ambient occlusion: soft contact shadows. Turn off on slow machines." style="font-size: 0.85em; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 5px;">
-          <input type="checkbox" id="ao-toggle" checked> AO
-        </label>
-      </div>
+    <div class="tb-left">
+      <h2 class="tb-title">Modular School Builder</h2>
+      <div class="tb-sep"></div>
+      <label class="tb-field" title="Grid snap for moving and placing modules">Snap (m)
+        <input type="number" id="global-snap-input" value="0.5" step="0.1">
+      </label>
+      <label class="tb-check"><input type="checkbox" id="trackpad-toggle"> Trackpad</label>
+      <label class="tb-check" title="Ambient occlusion: soft contact shadows. Turn off on slow machines."><input type="checkbox" id="ao-toggle" checked> AO</label>
     </div>
 
-    <div style="display: flex; gap: 10px; align-items: center;">
-      <button id="save-btn" class="btn-secondary">Save Project</button>
-      <button id="load-btn" class="btn-secondary">Load Project</button>
-      <input type="file" id="load-file-input" accept=".json" style="display: none;">
-      <button id="export-gltf-btn" class="btn-secondary">Export 3D</button>
-      <button id="export-ifc-btn" class="btn-secondary">Export BIM</button>
-
-      <div style="width: 1px; height: 30px; background: #444; margin: 0 5px;"></div>
-
-      <button id="qc-elec-btn" style="background: #3c5444;">QC: Electrical</button>
-      <button id="qc-roof-btn" style="background: #3c5444;">QC: Roofs</button>
-      <button id="qc-orient-btn" style="background: #3c5444;">QC: Orient&walls</button>
-      <button id="qc-links-btn" style="background: #3c5444;">QC: Links</button>
-
-      <div style="width: 1px; height: 30px; background: #444; margin: 0 5px;"></div>
-
-      <button id="zoom-extents-btn" class="btn-secondary">Zoom Extent</button>
-      <button id="view-mode-btn" style="background: #52795f;">2D Plan View</button>
+    <div class="tb-right">
+      <div class="tb-group" role="group" aria-label="File">
+        <button id="new-btn" class="tb-btn" title="Start a new, empty project (Ctrl+Z to undo)">New</button>
+        <button id="load-btn" class="tb-btn" title="Open a project file (.json)">Open</button>
+        <button id="save-btn" class="tb-btn" title="Save the project as a file (.json)">Save</button>
+        <input type="file" id="load-file-input" accept=".json" style="display: none;">
+      </div>
+      <div class="tb-group" role="group" aria-label="Export">
+        <button id="export-gltf-btn" class="tb-btn" title="Export the 3D model (.glb)">Export 3D</button>
+        <button id="export-ifc-btn" class="tb-btn" title="Export BIM (IFC) — coming with detailed mode">Export BIM</button>
+        <button id="archicad-sync-btn" class="tb-btn tb-accent" title="Export the placement file for the Archicad hotlink sync script">Sync to Archicad</button>
+      </div>
+      <div class="tb-group" role="group" aria-label="Quality checks">
+        <span class="tb-label">QC</span>
+        <button id="qc-elec-btn" class="tb-btn">Electrical</button>
+        <button id="qc-roof-btn" class="tb-btn">Roofs</button>
+        <button id="qc-orient-btn" class="tb-btn">Orient &amp; walls</button>
+        <button id="qc-links-btn" class="tb-btn">Links</button>
+      </div>
+      <div class="tb-group" role="group" aria-label="View">
+        <button id="zoom-extents-btn" class="tb-btn" title="Zoom to fit all modules">Zoom extents</button>
+        <button id="view-mode-btn" class="tb-btn" title="Switch between 3D and plan view">Plan view</button>
+      </div>
     </div>
   </div>
 
