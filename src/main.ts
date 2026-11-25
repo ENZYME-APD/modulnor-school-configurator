@@ -27,8 +27,15 @@ import { toSavedModules, type SavedModule } from "./core/layout";
 import {
   initCloud,
   markCloudDirty,
-  detachCloudProject,
+  hasUnsavedChanges,
+  startNewProject,
+  setFileProject,
+  openCloudProject,
+  saveCurrentProject,
+  saveAsCloudProject,
+  saveAsFile,
 } from "./cloud/cloudPanel";
+import { attachMenu, showMenu, type MenuItem } from "./ui/menu";
 import { initMarquee, beginMarquee } from "./tools/marquee";
 import {
   saveProject,
@@ -706,45 +713,85 @@ feeBtn.addEventListener("click", () => {
 // FILES
 // ─────────────────────────────────────────────────────────────────────────────
 
-document.getElementById("save-btn")!.addEventListener("click", async () => {
-  updateSelection(null, false);
-  await saveProject();
-});
+// File menu: New · Open ▾ (cloud / file) · Save (back to where it lives) · Save as ▾
+
+const confirmDiscard = (what: string): boolean =>
+  !hasUnsavedChanges() ||
+  store.placedBlocks.length === 0 ||
+  window.confirm(
+    `The current layout has unsaved changes. ${what} anyway? (Ctrl+Z brings it back.)`,
+  );
 
 const loadInput = document.getElementById(
   "load-file-input",
 ) as HTMLInputElement;
-document
-  .getElementById("load-btn")!
-  .addEventListener("click", () => loadInput.click());
 loadInput.addEventListener("change", () => {
   const file = loadInput.files?.[0];
   if (!file) return;
   updateSelection(null, false);
   loadProject(file, {
     onRestored: () => {
+      setFileProject(file.name);
       updatePropertiesUI();
       afterLayoutChange();
+      setFileProject(file.name); // afterLayoutChange marks dirty; a fresh load is clean
       viewer.zoomExtents(allMeshes());
     },
   });
   loadInput.value = "";
 });
 
+const saveAsItems = (): MenuItem[] => [
+  {
+    label: "New cloud project…",
+    hint: "Shared with the team and Claude",
+    run: saveAsCloudProject,
+  },
+  {
+    label: "Download file (.json)",
+    hint: "Save to this computer",
+    run: () => {
+      updateSelection(null, false);
+      void saveAsFile();
+    },
+  },
+];
+
+attachMenu(document.getElementById("open-btn")!, () => [
+  {
+    label: "Cloud project…",
+    hint: "Shared projects, live updates",
+    run: () => {
+      if (confirmDiscard("Open another project")) openCloudProject();
+    },
+  },
+  {
+    label: "File from computer…",
+    hint: "A .json project file",
+    run: () => {
+      if (confirmDiscard("Open a file")) loadInput.click();
+    },
+  },
+]);
+
+attachMenu(document.getElementById("saveas-btn")!, saveAsItems);
+
+const saveBtn = document.getElementById("save-btn")!;
+saveBtn.addEventListener("click", async (e) => {
+  e.stopPropagation();
+  updateSelection(null, false);
+  // Never saved: ask where, like Save as
+  if (!(await saveCurrentProject())) showMenu(saveBtn, saveAsItems());
+});
+
 document.getElementById("new-btn")!.addEventListener("click", () => {
-  if (
-    store.placedBlocks.length > 0 &&
-    !window.confirm(
-      "Start a new, empty project? (Ctrl+Z brings the current layout back.)",
-    )
-  )
-    return;
+  if (!confirmDiscard("Start a new project")) return;
   updateSelection(null, false);
   if (store.placedBlocks.length > 0) saveState();
-  detachCloudProject(); // the cloud project stays as it was
   clearModules();
   updatePropertiesUI();
   afterLayoutChange();
+  startNewProject(); // any cloud project stays as it was
   viewer.zoomExtents([]);
 });
 
@@ -753,14 +800,26 @@ document.getElementById("archicad-sync-btn")!.addEventListener("click", () => {
 });
 
 document.getElementById("export-csv-btn")!.addEventListener("click", exportCSV);
-document
-  .getElementById("export-gltf-btn")!
-  .addEventListener("click", exportGLTF);
-document.getElementById("export-ifc-btn")!.addEventListener("click", () => {
+
+const exportIfcSoon = () =>
   alert(
     "IFC export is not available yet. It will use the detailed Archicad modules once detailed mode is in place.",
   );
-});
+attachMenu(document.getElementById("export-btn")!, () => [
+  {
+    label: "3D model (.glb)",
+    hint: "For viewers, renders, other 3D apps",
+    run: exportGLTF,
+  },
+  {
+    label: "Bill of quantities (.csv)",
+    hint: "Same as the sidebar's Export CSV",
+    run: () => {
+      void exportCSV();
+    },
+  },
+  { label: "BIM (IFC)", hint: "Coming with detailed mode", run: exportIfcSoon },
+]);
 
 // Initial state
 afterLayoutChange();
@@ -791,5 +850,6 @@ function applyLayout(modules: SavedModule[], opts: { fit: boolean }): void {
 
 void initCloud({
   getLayout: () => toSavedModules(store.placedBlocks), // world transforms, so grouped selections are fine
+  saveFile: (suggestedName) => saveProject(suggestedName),
   applyLayout,
 });

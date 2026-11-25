@@ -15,14 +15,18 @@ import {
   watchProject,
 } from "./client";
 
-// Cloud projects panel: sign in, open/save shared projects, and follow live
-// changes made by Claude (MCP) or colleagues while a project is open.
+// Current project: where it lives (cloud, a file on this computer, or not
+// saved yet), its save state, sign-in, and live changes made by Claude (MCP)
+// or colleagues while a cloud project is open. The File menu in the top bar
+// calls the public functions at the bottom; the sidebar box shows status only.
 
 export interface CloudHooks {
   /** Current scene layout. */
   getLayout: () => SavedModule[];
   /** Replace the scene with a layout (undoable locally). */
   applyLayout: (modules: SavedModule[], opts: { fit: boolean }) => void;
+  /** Save the layout as a file; resolves to the chosen file name, or null if cancelled. */
+  saveFile: (suggestedName?: string) => Promise<string | null>;
 }
 
 interface OpenProject {
@@ -34,6 +38,8 @@ interface OpenProject {
 let hooks: CloudHooks;
 let session: Session | null = null;
 let open: OpenProject | null = null;
+/** Name of the local file the current layout came from or was saved to. */
+let fileName: string | null = null;
 let dirty = false;
 let applying = false;
 let pendingRemote: ProjectRow | null = null;
@@ -79,19 +85,16 @@ function mount(): void {
   panel.className = "cloud-panel";
   panel.innerHTML = `
     <div class="cloud-head">
-      <span class="cloud-title">Cloud project</span>
-      <span id="cloud-user" class="cloud-user"></span>
+      <span class="cloud-title">Project</span>
+      <span class="cloud-account">
+        <span id="cloud-user" class="cloud-user"></span>
+        <button id="cloud-signin-btn" class="cloud-link">Sign in</button>
+        <button id="cloud-signout-btn" class="cloud-link">Sign out</button>
+      </span>
     </div>
     <div id="cloud-name" class="cloud-name"></div>
     <div id="cloud-status" class="cloud-status"></div>
-    <div id="cloud-banner" class="cloud-banner" hidden></div>
-    <div class="cloud-actions">
-      <button id="cloud-signin-btn" class="btn-secondary">Sign in</button>
-      <button id="cloud-open-btn" class="btn-secondary">Open…</button>
-      <button id="cloud-save-btn" class="btn-secondary">Save</button>
-      <button id="cloud-saveas-btn" class="btn-secondary">Save as…</button>
-      <button id="cloud-signout-btn" class="cloud-link">Sign out</button>
-    </div>`;
+    <div id="cloud-banner" class="cloud-banner" hidden></div>`;
   const sidebar = el("sidebar");
   sidebar.insertBefore(panel, sidebar.firstChild);
 
@@ -106,42 +109,37 @@ function mount(): void {
   toast.hidden = true;
   document.body.appendChild(toast);
 
-  el("cloud-signin-btn").addEventListener("click", showSignIn);
+  el("cloud-signin-btn").addEventListener("click", () => showSignIn());
   el("cloud-signout-btn").addEventListener("click", async () => {
     if (
+      open &&
       dirty &&
-      !window.confirm(
-        "You have unsaved changes in the cloud project. Sign out anyway?",
-      )
+      !window.confirm("The cloud project has unsaved changes. Sign out anyway?")
     )
       return;
     await signOut();
   });
-  el("cloud-open-btn").addEventListener("click", showOpen);
-  el("cloud-save-btn").addEventListener("click", () => {
-    void save();
-  });
-  el("cloud-saveas-btn").addEventListener("click", () => {
-    void saveAs();
-  });
 }
 
 function render(): void {
+  if (!document.getElementById("cloud-panel")) return; // not mounted yet (start-up)
   const signedIn = !!session;
   el("cloud-user").textContent = signedIn ? (session!.user.email ?? "") : "";
   el("cloud-signin-btn").hidden = signedIn;
-  el("cloud-open-btn").hidden = !signedIn;
-  el("cloud-save-btn").hidden = !signedIn;
-  el("cloud-saveas-btn").hidden = !signedIn;
   el("cloud-signout-btn").hidden = !signedIn;
-  let name = "Sign in to share projects with the team and with Claude.";
-  if (signedIn) name = open ? open.name : "Not saved to the cloud yet";
+
+  let name = "Untitled";
+  let where = "Not saved yet";
+  if (open) {
+    name = open.name;
+    where = `Cloud · version ${open.version}`;
+  } else if (fileName) {
+    name = fileName.replace(/\.json$/i, "");
+    where = `File on this computer · ${fileName}`;
+  }
   el("cloud-name").textContent = name;
-  el("cloud-name").classList.toggle("muted", !open);
-  let status = "";
-  if (open)
-    status = dirty ? "Unsaved changes" : `Saved · version ${open.version}`;
-  el("cloud-status").textContent = status;
+  el("cloud-name").classList.toggle("muted", !open && !fileName);
+  el("cloud-status").textContent = dirty ? `${where} · unsaved changes` : where;
   el("cloud-status").classList.toggle("dirty", dirty);
 }
 
@@ -190,10 +188,10 @@ function dialog(html: string): HTMLDialogElement {
   return d;
 }
 
-function showSignIn(): void {
+function showSignIn(then?: () => void): void {
   const d = dialog(`
     <h3>Sign in</h3>
-    <p class="cloud-hint">Use your Enzyme account. Ask an admin if you don't have one.</p>
+    <p class="cloud-hint">Cloud projects are shared with the team and with Claude. Use your Enzyme account; ask an admin if you don't have one.</p>
     <form id="cloud-signin-form" class="cloud-form">
       <label>Email<input type="email" name="email" autocomplete="username" required></label>
       <label>Password<input type="password" name="password" autocomplete="current-password"></label>
@@ -216,7 +214,10 @@ function showSignIn(): void {
     msg.textContent = "Signing in…";
     const err = await signIn(String(fd.get("email")).trim(), password);
     if (err) msg.textContent = err;
-    else d.close();
+    else {
+      d.close();
+      then?.();
+    }
   });
   d.querySelector("#cloud-magic-btn")!.addEventListener("click", async () => {
     const email = String(new FormData(form).get("email") ?? "").trim();
@@ -238,7 +239,7 @@ async function showOpen(): Promise<void> {
     const rows = await listProjects();
     const listEl = d.querySelector("#cloud-list")!;
     if (rows.length === 0) {
-      listEl.innerHTML = `<p class="cloud-hint">No cloud projects yet. Use “Save as…” to put the current layout in the cloud.</p>`;
+      listEl.innerHTML = `<p class="cloud-hint">No cloud projects yet. Use Save as → New cloud project to put the current layout in the cloud.</p>`;
       return;
     }
     listEl.innerHTML = rows
@@ -279,6 +280,7 @@ function applyRow(row: ProjectRow, fit: boolean): void {
     applying = false;
   }
   open = { id: row.id, name: row.name, version: row.version };
+  fileName = null;
   dirty = false;
   pendingRemote = null;
   banner(null);
@@ -294,11 +296,7 @@ async function openProject(id: string): Promise<void> {
     const row = await getProject(id);
     applyRow(row, true);
     follow(row.id);
-    try {
-      localStorage.setItem("modulnor.cloudProject", row.id);
-    } catch {
-      /* storage unavailable */
-    }
+    rememberCloud(row.id);
   } catch (e) {
     window.alert(`Could not open the project: ${(e as Error).message}`);
   }
@@ -402,6 +400,8 @@ async function saveAs(): Promise<void> {
   try {
     const row = await createProject(name.trim(), hooks.getLayout());
     open = { id: row.id, name: row.name, version: row.version };
+    fileName = null;
+    rememberCloud(row.id);
     dirty = false;
     pendingRemote = null;
     banner(null);
@@ -413,36 +413,112 @@ async function saveAs(): Promise<void> {
   }
 }
 
-// ── Public API ───────────────────────────────────────────────────────────────
+/** Remember the open cloud project so a reload reopens it (null = forget). */
+function rememberCloud(id: string | null): void {
+  try {
+    if (id) localStorage.setItem("modulnor.cloudProject", id);
+    else localStorage.removeItem("modulnor.cloudProject");
+  } catch {
+    /* storage unavailable */
+  }
+}
+
+/** Stop following the cloud project (it stays in the cloud as it was). */
+function leaveCloud(): void {
+  unwatch?.();
+  unwatch = null;
+  open = null;
+  pendingRemote = null;
+  banner(null);
+  rememberCloud(null);
+}
+
+/** Run `fn` once signed in, asking to sign in first if needed. */
+function withSession(fn: () => void): void {
+  if (session) fn();
+  else showSignIn(fn);
+}
+
+// ── Public API (File menu) ───────────────────────────────────────────────────
 
 /** Call after any local layout change. */
 export function markCloudDirty(): void {
-  if (applying || !open || dirty) return;
+  if (applying || dirty) return;
   dirty = true;
   render();
 }
 
-/** A layout loaded from a file is no longer the open cloud project. */
-export function detachCloudProject(): void {
-  unwatch?.();
-  unwatch = null;
-  open = null;
+/** True if the current layout has changes that were not saved anywhere. */
+export const hasUnsavedChanges = (): boolean => dirty;
+
+/** New, empty project (not saved anywhere yet). */
+export function startNewProject(): void {
+  leaveCloud();
+  fileName = null;
   dirty = false;
-  pendingRemote = null;
-  banner(null);
   render();
+}
+
+/** The layout now comes from a file on this computer. */
+export function setFileProject(name: string): void {
+  leaveCloud();
+  fileName = name;
+  dirty = false;
+  render();
+}
+
+/** Open → Cloud project… */
+export function openCloudProject(): void {
+  withSession(() => {
+    void showOpen();
+  });
+}
+
+/**
+ * Save back to where the project lives. Returns false when it has never been
+ * saved, so the caller can ask where (Save as).
+ */
+export async function saveCurrentProject(): Promise<boolean> {
+  if (open) {
+    await save();
+    return true;
+  }
+  if (fileName) {
+    const saved = await hooks.saveFile(fileName);
+    if (saved) setFileProject(saved);
+    return true;
+  }
+  return false;
+}
+
+/** Save as → New cloud project… */
+export function saveAsCloudProject(): void {
+  withSession(() => {
+    void saveAs();
+  });
+}
+
+/** Save as → Download file (.json) */
+export async function saveAsFile(): Promise<void> {
+  const saved = await hooks.saveFile(fileName ?? open?.name ?? undefined);
+  if (saved) setFileProject(saved);
 }
 
 export async function initCloud(h: CloudHooks): Promise<void> {
   hooks = h;
   mount();
+  dirty = false; // the empty start-up scene is not an unsaved change
   session = await currentSession();
   render();
   supabase.auth.onAuthStateChange((_event, s) => {
     const was = session?.user.id;
     session = s;
-    if (!s) detachCloudProject();
-    else if (was !== s.user.id) void reopenLast();
+    if (!s) {
+      if (open) {
+        leaveCloud();
+        dirty = false;
+      }
+    } else if (was !== s.user.id) void reopenLast();
     render();
   });
   if (session) await reopenLast();
